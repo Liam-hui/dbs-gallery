@@ -1,0 +1,303 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap');
+
+$tablet-width: 768px;
+$desktop-width: 1024px;
+
+@mixin mobile {
+  @media (max-width: #{850px}) {
+    @content;
+  }
+}
+
+// @mixin tablet {
+//   @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
+//     @content;
+//   }
+// }
+
+// @mixin desktop {
+//   @media (min-width: #{$desktop-width}) {
+//     @content;
+//   }
+// }
+
+
+html, body, #root {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Noto Serif JP', serif;
+}
+
+#root {
+  position: relative;
+}
+
+div {
+  box-sizing: border-box;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+#cover {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #fff;
+  box-shadow:
+    inset 60px 0 120px #ededed,  /* left magenta */
+    inset -60px 0 120px #ededed; /* right cyan */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  opacity: 1;
+  z-index: 99;
+  transition: opacity 0.5s ease-in-out ;
+}
+
+.isLandscape #cover {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease-in-out 1s;
+}
+
+#intro {
+  margin-left: 150px;
+  width: 47vw;
+  height: 100%;
+  z-index: 1;
+}
+
+#banner {
+  position: relative;
+  // width: 600px;
+  // height: 150px;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease-in-out 2s;
+  img {
+    position: absolute;
+    right: 0;
+    width: 80%;
+    height: auto;
+  }
+}
+
+.isLandscape #banner{
+  width: 100%;
+  height: 25%;
+  top: 10%;
+  // height: 100vh;
+}
+
+#galleryContainer {
+  position: relative;
+  height: 100%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+#bgFirst {
+  height: 100%;
+  width: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#scrollContent {
+  position: relative;
+  height: 100%;
+  padding-right: 25000px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-image: url("../assets/images/bgTile.png");
+  background-size: auto 100%;
+  background-repeat: repeat-x;
+  & > div {
+    flex-shrink: 0;
+    &:not(#intro) {
+      pointer-events: none;
+      overflow: hidden;
+      opacity: 0;
+      width: 0;
+      transition: width 1s ease-in-out, opacity 1s ease-in-out;
+    }
+  }
+}
+
+.isOpened #scrollContent {
+  & > div:not(#intro) {
+    pointer-events: unset;
+    opacity: 1;
+    overflow: unset;
+    width: var(--contentWidth);
+  }
+}
+
+.parallaxElement {
+  opacity: 0;
+  &.animated {
+    opacity: 1;
+  }
+  transition: opacity 0.5s ease-in;
+}
+
+.featureImage {
+  position: relative;
+  width: 200px;
+  height: 500px;
+  object-fit: cover;
+  margin-bottom: 15vh;
+  // &:nth-match(odd) {
+  //   margin-top: -30px;
+  // }
+  // &:nth-of-class(even) {
+  //   margin-top: 30px;
+  // }
+  @include mobile {
+    width: 220px;
+  }
+  transition: width 0.5s ease-in-out, height 0.5s ease-in-out;
+}
+
+.isOpened .featureImage{
+  width: 500px;
+  height: 400px;
+  margin: 0 20px;
+}
+
+video {
+  width: 100%;
+  height: auto;
+}
+
+.videoContainer {
+  width: 450px;
+  @include mobile {
+    width: 200px;
+  }
+}
+
+.largeVideoContainer {
+  width: 800px;
+  @include mobile {
+    width: 400px;
+  }
+}
+
+.title {
+  font-size: 40px;
+  margin-bottom: 30px;
+  @include mobile {
+    font-size: 20px;
+  }
+}
+
+.blurBox {
+  max-height: 100%;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  filter: brightness(1.5) saturate(140%);
+  @include mobile {
+    padding: 0px;
+  }
+  p {
+    font-size: 20px;
+    @include mobile {
+      font-size: 14px;
+    }
+  }
+}
+
+.redBorderImage {
+  border: 1px solid red;
+  width: 150px;
+  height: 150px;
+  margin-right: 15px;
+  object-fit: cover;
+  @include mobile {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+.squareImage {
+  width: 110px;
+  height: 110px;
+  margin-right: 15px;
+  object-fit: cover;
+  @include mobile {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+.redLinesImage {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
+.audio {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  right: 0;
+  bottom: 40px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.audioLabel {
+  font-size: 14px;
+}
+
+.audioIcon {
+  width: 40px;
+  height: 40px;
+  background-image: url("../assets/icons/icon-audio.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.sep {
+  border-left: 2px solid black;
+  height: 100%;
+  width: 40px;
+  position: relative;
+}
+
+.sepCircle {
+  display: flex;
+  position: absolute;
+  top: -12px;
+  left: -8px;
+  div {
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: black;
+  }
+}
