@@ -9,11 +9,12 @@ import '@/styles/styles.css';
 
 function App() {
 
-  const [isLandscape, setIsLandscape] = useState(false)
+  const [isLandscape, setIsLandscape] = useState(false);
+  const [canScroll, setCanScroll] = useState(false);
 
   useEffect(() => {
     setTimeout(
-      () => setIsLandscape(screen.width > screen.height)
+      () => setIsLandscape(window.innerWidth > window.innerHeight)
     , 500)
   }, []); 
 
@@ -24,13 +25,20 @@ function App() {
     resizeLoop = setTimeout(doneResizing, 500);
   });
   function doneResizing() {
-    setIsLandscape(screen.width > screen.height)
+    setIsLandscape(window.innerWidth > window.innerHeight)
   }
+
+  useEffect(() => {
+    setTimeout(
+      () => setCanScroll(isLandscape),
+      isLandscape ? 2500 : 0
+    )
+  }, [isLandscape]); 
 
   return (
     <Provider store={store}>
-      <div className={isLandscape ? 'isLandscape' : ''} style={{ width: '100%', height: '100%' }}>
-        <Gallery/>
+      <div className={isLandscape ? 'isLandscape' : ''} style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
+        <Gallery canScroll={canScroll}/>
         <Cover/>
       </div>
     </Provider>

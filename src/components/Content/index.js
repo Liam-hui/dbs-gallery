@@ -1,22 +1,23 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useResizeDetector } from 'react-resize-detector';
 
 export default function Content(props) {
 
-  const { children, style, childrenStyle } = props;
+  const { children, style, childrenStyle, index } = props;
 
-  const contentRef = useRef();
-  const [contentHeight, setContentHeight] = useState(0);
+  const onResize = useCallback((e) => {
+    setContentWidth(ref.current.offsetWidth)
+  }, []);
+
+  const { ref } = useResizeDetector({ onResize });
+
   const [contentWidth, setContentWidth] = useState(0);
-
-  useEffect(() => {
-    setContentWidth(contentRef.current?.clientWidth)
-    setContentHeight(contentRef.current?.clientHeight)
-  }, [contentRef.current?.clientWidth]);
 
   return (
     <div 
+      id={`content${index}`}
+      className='contentContainer'
       style={{
-        height: contentHeight,
         "--contentWidth": contentWidth + 'px',
         ... style,
       }}
@@ -26,7 +27,7 @@ export default function Content(props) {
           position: 'absolute',
           ... childrenStyle
         }} 
-        ref={contentRef}
+        ref={ref}
       >
         {children}
       </div>

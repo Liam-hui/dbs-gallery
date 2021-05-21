@@ -1,7 +1,4 @@
 import React from 'react';
-import { useSelector } from "react-redux";
-
-import { StyledContainer } from './styles';
 
 const Audio = () => {
   return (
@@ -12,18 +9,28 @@ const Audio = () => {
   )
 }
 
+const LearnMore = () => {
+  return (
+    <div className='learnMore'>
+      learn more
+    </div>
+  )
+}
+
 export default function InfoBox(props) {
 
-  const { children, style, audio } = props;
-
-  const screen = useSelector(state => state.screen);
+  const { children, style, audio, learnMore, parallax, offset } = props;
 
   return (
-    <div className='blurBox' style={style}>
+    <div className={`infoBox${parallax ? ' parallaxElement' : ''}`} style={style} data-offset={offset}>
       {children}
+      {learnMore &&
+        <LearnMore/>
+      }
       {audio &&
         <Audio/>
       }
     </div>
   );
 }
+

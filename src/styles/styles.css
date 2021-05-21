@@ -1,4 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap");
+@font-face {
+  font-family: "Avenir";
+  src: url("../assets/fonts/Avenir-Book.ttf");
+}
 html, body, #root {
   margin: 0;
   width: 100%;
@@ -32,8 +36,7 @@ div {
   height: 100%;
   width: 100%;
   background-color: #fff;
-  box-shadow: inset 60px 0 120px #ededed, inset -60px 0 120px #ededed;
-  /* right cyan */
+  box-shadow: inset 60px 0 120px rgba(0, 0, 0, 0.2), inset -60px 0 120px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -50,20 +53,46 @@ div {
 }
 
 #intro {
-  margin-left: 150px;
-  width: 47vw;
+  position: relative;
+  width: 50vw;
   height: 100%;
   z-index: 1;
+  padding-left: 220px;
+}
+@media (max-width: 850px) {
+  #intro {
+    padding-left: 80px;
+  }
+}
+#intro .infoBox {
+  position: absolute;
+  top: 35%;
+  height: 40%;
+  width: 50%;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out 2.5s;
+}
+@media (max-width: 850px) {
+  #intro .infoBox {
+    width: 70%;
+    height: unset;
+  }
+}
+
+.isLandscape #intro .infoBox {
+  opacity: 1;
 }
 
 #banner {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.5s ease-in-out 2s;
+  transition: all 0.7s ease-in-out 2s;
 }
 #banner img {
   position: absolute;
@@ -81,41 +110,56 @@ div {
 #galleryContainer {
   position: relative;
   height: 100%;
-  overflow-x: scroll;
   overflow-y: hidden;
 }
 
 #bgFirst {
   height: 100%;
-  width: auto;
   position: absolute;
   top: 0;
   left: 0;
+}
+#bgFirst img {
+  height: 100%;
+  width: auto;
 }
 
 #scrollContent {
   position: relative;
   height: 100%;
-  padding-right: 25000px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-shrink: 0;
+  display: inline-flex;
   background-image: url("../assets/images/bgTile.png");
   background-size: auto 100%;
   background-repeat: repeat-x;
+  padding-right: 30vw;
+  transition: padding-right 0.5s ease-in-out;
 }
 #scrollContent > div {
   flex-shrink: 0;
 }
-#scrollContent > div:not(#intro) {
+
+.contentContainer {
+  height: 100%;
   pointer-events: none;
   overflow: hidden;
   opacity: 0;
   width: 0;
   transition: width 1s ease-in-out, opacity 1s ease-in-out;
+  padding-top: 50px;
+}
+@media (max-width: 850px) {
+  .contentContainer {
+    padding-top: 8px;
+  }
+}
+.contentContainer > div {
+  height: 100%;
+  display: inline-flex;
+  padding: 0 20px;
 }
 
-.isOpened #scrollContent > div:not(#intro) {
+.isOpened .contentContainer {
   pointer-events: unset;
   opacity: 1;
   overflow: unset;
@@ -125,6 +169,7 @@ div {
 .parallaxElement {
   opacity: 0;
   transition: opacity 0.5s ease-in;
+  -webkit-transition: opacity 0.5s ease-in;
 }
 .parallaxElement.animated {
   opacity: 1;
@@ -132,76 +177,175 @@ div {
 
 .featureImage {
   position: relative;
-  width: 200px;
-  height: 500px;
+  width: 160px;
+  height: 400px;
   object-fit: cover;
-  margin-bottom: 15vh;
-  transition: width 0.5s ease-in-out, height 0.5s ease-in-out;
+  margin-top: 10vh;
+  opacity: 0;
+  box-shadow: 0px 3px 15px 2px rgba(0, 0, 0, 0.25);
+}
+.featureImage:nth-of-type(odd) {
+  transform: translateY(-15px);
+}
+@media (max-width: 850px) {
+  .featureImage:nth-of-type(odd) {
+    transform: translateY(-10px);
+  }
+}
+.featureImage:nth-of-type(even) {
+  transform: translateY(15px);
+}
+@media (max-width: 850px) {
+  .featureImage:nth-of-type(even) {
+    transform: translateY(10px);
+  }
 }
 @media (max-width: 850px) {
   .featureImage {
-    width: 220px;
+    width: 90px;
+    height: 225px;
   }
+}
+
+.featureImage:nth-of-type(1) {
+  transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out 2.4s;
+}
+
+.featureImage:nth-of-type(2) {
+  transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out 2.6s;
+}
+
+.featureImage:nth-of-type(3) {
+  transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out 2.8s;
+}
+
+.featureImage:nth-of-type(4) {
+  transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out 3s;
+}
+
+.isLandscape .featureImage {
+  opacity: 1;
 }
 
 .isOpened .featureImage {
-  width: 500px;
-  height: 400px;
-  margin: 0 20px;
-}
-
-video {
-  width: 100%;
-  height: auto;
-}
-
-.videoContainer {
+  opacity: 1;
   width: 450px;
+  height: 360px;
+  transform: unset;
 }
 @media (max-width: 850px) {
-  .videoContainer {
-    width: 200px;
+  .isOpened .featureImage {
+    width: 250px;
+    height: 200px;
   }
 }
 
-.largeVideoContainer {
-  width: 800px;
+.isOpened .featureImage:nth-of-type(1) {
+  width: 340px;
+  height: 400px;
 }
 @media (max-width: 850px) {
-  .largeVideoContainer {
-    width: 400px;
+  .isOpened .featureImage:nth-of-type(1) {
+    width: 170px;
+    height: 200px;
+  }
+}
+
+.isOpened .featureImage:nth-of-type(3) {
+  transform: translateY(50px);
+  width: 240px;
+  height: 400px;
+}
+@media (max-width: 850px) {
+  .isOpened .featureImage:nth-of-type(3) {
+    transform: translateY(10px);
+    width: 168px;
+    height: 230px;
+  }
+}
+
+.verticalMargin {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.horizontalMargin {
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+.videoContainer {
+  height: 230px;
+}
+@media (max-width: 850px) {
+  .videoContainer {
+    height: 95px;
+  }
+}
+.videoContainer video {
+  width: auto;
+  height: 100%;
+}
+
+.videoContainer.largeVideo {
+  height: 420px;
+}
+@media (max-width: 850px) {
+  .videoContainer.largeVideo {
+    height: 200px;
   }
 }
 
 .title {
-  font-size: 40px;
+  font-size: 35px;
   margin-bottom: 30px;
 }
 @media (max-width: 850px) {
   .title {
-    font-size: 20px;
+    font-size: 18px;
+    margin-bottom: 10px;
   }
 }
 
-.blurBox {
-  max-height: 100%;
-  padding: 20px;
+.infoBox {
+  position: relative;
   background-color: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  filter: brightness(1.5) saturate(140%);
+  padding: 20px;
 }
 @media (max-width: 850px) {
-  .blurBox {
-    padding: 0px;
+  .infoBox {
+    padding: 5px 15px;
   }
 }
-.blurBox p {
-  font-size: 20px;
+.infoBox p {
+  font-size: 18px;
 }
 @media (max-width: 850px) {
-  .blurBox p {
-    font-size: 14px;
+  .infoBox p {
+    margin: 4px 0;
+    font-size: 12px;
+  }
+}
+.infoBox img {
+  width: auto;
+  height: 100px;
+}
+
+.learnMore {
+  display: inline-block;
+  font-family: "Avenir";
+  color: white;
+  background: linear-gradient(to left, #030303FF 0%, #29292966 80%, #56565644 100%);
+  font-size: 16px;
+  padding: 5px 30px;
+  cursor: pointer;
+}
+@media (max-width: 850px) {
+  .learnMore {
+    font-size: 13px;
+    padding: 3px 12px;
   }
 }
 
@@ -209,34 +353,27 @@ video {
   border: 1px solid red;
   width: 150px;
   height: 150px;
-  margin-right: 15px;
+  margin: 0 15px 10px 0;
   object-fit: cover;
 }
 @media (max-width: 850px) {
   .redBorderImage {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
   }
 }
 
 .squareImage {
   width: 110px;
   height: 110px;
-  margin-right: 15px;
+  margin: 0 15px 10px 0;
   object-fit: cover;
 }
 @media (max-width: 850px) {
   .squareImage {
-    width: 60px;
-    height: 60px;
+    width: 55px;
+    height: 55px;
   }
-}
-
-.redLinesImage {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  object-fit: contain;
 }
 
 .audio {
@@ -253,14 +390,25 @@ video {
 .audioLabel {
   font-size: 14px;
 }
+@media (max-width: 850px) {
+  .audioLabel {
+    font-size: 12px;
+  }
+}
 
 .audioIcon {
-  width: 40px;
-  height: 40px;
   background-image: url("../assets/icons/icon-audio.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  width: 40px;
+  height: 40px;
+}
+@media (max-width: 850px) {
+  .audioIcon {
+    width: 30px;
+    height: 30px;
+  }
 }
 
 .sep {
@@ -281,6 +429,248 @@ video {
   height: 20px;
   border-radius: 10px;
   background-color: black;
+}
+@media (max-width: 850px) {
+  .sepCircle div {
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+  }
+}
+
+.org {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 250px;
+}
+@media (max-width: 850px) {
+  .org {
+    width: 200px;
+  }
+}
+.org .logo {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+@media (max-width: 850px) {
+  .org .logo {
+    transform: scale(0.5);
+  }
+}
+.org #dbsLogo {
+  background-image: url("../assets/images/moko_logo.png");
+  height: 120px;
+  width: 200px;
+}
+.org #warnerLogo {
+  background-image: url("../assets/images/moko_logo.png");
+  height: 120px;
+  width: 200px;
+}
+.org #mokoLogo {
+  background-image: url("../assets/images/moko_logo.png");
+  height: 120px;
+  width: 200px;
+}
+.org #hkgdaLogo {
+  background-image: url("../assets/images/moko_logo.png");
+  height: 120px;
+  width: 200px;
+}
+
+#content1 .infoBox {
+  align-self: flex-start;
+  padding-right: 300px;
+}
+@media (max-width: 850px) {
+  #content1 .infoBox {
+    padding-right: 150px;
+  }
+}
+
+#content3 .title {
+  position: absolute;
+  left: -240px;
+}
+@media (max-width: 850px) {
+  #content3 .title {
+    left: -150px;
+  }
+}
+#content3 .infoBox {
+  align-self: flex-start;
+  padding-right: 300px;
+}
+@media (max-width: 850px) {
+  #content3 .infoBox {
+    padding-right: 150px;
+  }
+}
+
+#content5 .heading {
+  height: 60px;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 35px;
+}
+@media (max-width: 850px) {
+  #content5 .heading {
+    height: 20px;
+    font-size: 20px;
+  }
+}
+#content5 .heading img {
+  height: 100%;
+  width: auto;
+  margin-right: 5px;
+}
+#content5 .infoBox {
+  position: absolute;
+  bottom: 15vh;
+  right: 0;
+  padding-right: 80px;
+  padding-bottom: 100px;
+}
+@media (max-width: 850px) {
+  #content5 .infoBox {
+    padding-right: 80px;
+    padding-bottom: 50px;
+  }
+}
+#content5 .title {
+  height: 60px;
+}
+
+#content6 #contactUs {
+  display: flex;
+  justify-content: center;
+  width: 800px;
+  padding-top: 120px;
+}
+@media (max-width: 850px) {
+  #content6 #contactUs {
+    padding-top: 80px;
+    width: 500px;
+  }
+}
+#content6 #contactUs .heading {
+  color: white;
+  font-size: 35px;
+}
+@media (max-width: 850px) {
+  #content6 #contactUs .heading {
+    font-size: 20px;
+  }
+}
+#content6 #contactUs .heading img {
+  height: 35px;
+  width: auto;
+  margin-left: 10px;
+  margin-bottom: -5px;
+}
+#content6 .flexFill {
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+}
+#content6 .appInfo {
+  position: relative;
+  height: 85.17%;
+}
+#content6 .appInfo img {
+  position: relative;
+  height: 100%;
+  width: auto;
+}
+#content6 .appInfo .icon {
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+@media (max-width: 850px) {
+  #content6 .appInfo .icon {
+    width: 12px;
+    height: 12px;
+  }
+}
+#content6 .appInfo #instagramIcon {
+  background-image: url("../assets/icons/icon-instagram.png");
+}
+#content6 .appInfo #facebookIcon {
+  background-image: url("../assets/icons/icon-facebook.png");
+}
+#content6 .appInfo .row {
+  align-items: center;
+  margin: 5px 0;
+}
+#content6 .appInfo a {
+  color: white;
+  text-decoration: unset;
+  font-size: 20px;
+}
+@media (max-width: 850px) {
+  #content6 .appInfo a {
+    font-size: 10px;
+  }
+}
+#content6 .appInfo p {
+  color: white;
+  font-size: 20px;
+}
+@media (max-width: 850px) {
+  #content6 .appInfo p {
+    font-size: 14px;
+  }
+}
+#content6 .appInfo .downloadButton {
+  margin: 0 2px;
+  width: 150px;
+  height: 44px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+@media (max-width: 850px) {
+  #content6 .appInfo .downloadButton {
+    width: 80px;
+    height: 24px;
+  }
+}
+#content6 .appInfo #downloadIos {
+  background-image: url("../assets/images/download_android.png");
+}
+#content6 .appInfo #downloadAndroid {
+  background-image: url("../assets/images/download_ios.png");
+}
+#content6 .mountain {
+  position: relative;
+  height: 85.17%;
+}
+#content6 .mountain img {
+  height: 100%;
+  width: auto;
+}
+#content6 .org {
+  color: white;
+}
+
+#content7 .orgWrapper {
+  height: 85.17%;
+  display: flex;
+  align-items: center;
 }
 
 /*# sourceMappingURL=styles.css.map */

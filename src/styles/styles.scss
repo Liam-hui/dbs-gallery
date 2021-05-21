@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap');
 
+@font-face {
+  font-family: "Avenir";
+  src: url("../assets/fonts/Avenir-Book.ttf");
+}
+
 $tablet-width: 768px;
 $desktop-width: 1024px;
 
@@ -56,8 +61,8 @@ div {
   width: 100%;
   background-color: #fff;
   box-shadow:
-    inset 60px 0 120px #ededed,  /* left magenta */
-    inset -60px 0 120px #ededed; /* right cyan */
+    inset 60px 0 120px rgba(0,0,0,0.2),
+    inset -60px 0 120px rgba(0,0,0,0.2); 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,22 +79,42 @@ div {
 }
 
 #intro {
-  margin-left: 150px;
-  width: 47vw;
+  position: relative;
+  width: 50vw;
   height: 100%;
   z-index: 1;
+  padding-left: 220px;
+  @include mobile {
+    padding-left: 80px;
+  }
+  .infoBox {
+    position: absolute;
+    top: 35%;
+    height: 40%;
+    width: 50%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out 2.5s;
+    @include mobile {
+      width: 70%;
+      height: unset;
+    }
+  }
+}
+
+.isLandscape #intro .infoBox {
+  opacity: 1;
 }
 
 #banner {
-  position: relative;
-  // width: 600px;
-  // height: 150px;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.5s ease-in-out 2s;
+  transition: all 0.7s ease-in-out 2s;
   img {
     position: absolute;
     right: 0;
@@ -102,53 +127,68 @@ div {
   width: 100%;
   height: 25%;
   top: 10%;
-  // height: 100vh;
 }
 
 #galleryContainer {
   position: relative;
   height: 100%;
-  overflow-x: scroll;
   overflow-y: hidden;
 }
 
+
 #bgFirst {
   height: 100%;
-  width: auto;
   position: absolute;
   top: 0;
   left: 0;
+  img {
+    height: 100%;
+    width: auto;
+  }
 }
 
 #scrollContent {
   position: relative;
   height: 100%;
-  padding-right: 25000px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-shrink: 0;
+  display: inline-flex;
   background-image: url("../assets/images/bgTile.png");
   background-size: auto 100%;
   background-repeat: repeat-x;
+  padding-right: 30vw;
+  transition: padding-right 0.5s ease-in-out;
   & > div {
     flex-shrink: 0;
-    &:not(#intro) {
-      pointer-events: none;
-      overflow: hidden;
-      opacity: 0;
-      width: 0;
-      transition: width 1s ease-in-out, opacity 1s ease-in-out;
-    }
   }
 }
 
 .isOpened #scrollContent {
-  & > div:not(#intro) {
-    pointer-events: unset;
-    opacity: 1;
-    overflow: unset;
-    width: var(--contentWidth);
+  // padding-right: 0;
+}
+
+.contentContainer {
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  width: 0;
+  transition: width 1s ease-in-out, opacity 1s ease-in-out;
+  padding-top: 50px;
+  @include mobile {
+    padding-top: 8px;
   }
+  & > div {
+    height: 100%;
+    display: inline-flex;
+    padding: 0 20px;
+  }
+}
+
+.isOpened .contentContainer {
+  pointer-events: unset;
+  opacity: 1;
+  overflow: unset;
+  width: var(--contentWidth);
 }
 
 .parallaxElement {
@@ -157,74 +197,147 @@ div {
     opacity: 1;
   }
   transition: opacity 0.5s ease-in;
+  -webkit-transition: opacity 0.5s ease-in;
 }
 
 .featureImage {
   position: relative;
-  width: 200px;
-  height: 500px;
-  object-fit: cover;
-  margin-bottom: 15vh;
-  // &:nth-match(odd) {
-  //   margin-top: -30px;
-  // }
-  // &:nth-of-class(even) {
-  //   margin-top: 30px;
-  // }
-  @include mobile {
-    width: 220px;
-  }
-  transition: width 0.5s ease-in-out, height 0.5s ease-in-out;
-}
-
-.isOpened .featureImage{
-  width: 500px;
+  width: 160px;
   height: 400px;
-  margin: 0 20px;
+  object-fit: cover;
+  margin-top: 10vh;
+  opacity: 0;
+  box-shadow: 0px 3px 15px 2px rgba(0,0,0,0.25);
+  &:nth-of-type(odd) {
+    transform: translateY(-15px);
+    @include mobile {
+      transform: translateY(-10px);
+    }
+  }
+  &:nth-of-type(even) {
+    transform: translateY(15px);
+    @include mobile {
+      transform: translateY(10px);
+    }
+  }
+  @include mobile {
+    width: 90px;
+    height: 225px;
+  }
 }
 
-video {
-  width: 100%;
-  height: auto;
+@for $i from 0 to 4 {
+  .featureImage:nth-of-type(#{$i + 1}) {
+    transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out ( $i * 0.2s + 2.4s );
+  }
+}
+
+.isLandscape .featureImage {
+  opacity: 1;
+}
+
+.isOpened .featureImage {
+  opacity: 1;
+  width: 450px;
+  height: 360px;
+  transform: unset;
+  @include mobile {
+    width: 250px;
+    height: 200px;
+  }
+}
+
+.isOpened .featureImage:nth-of-type(1) {
+  width: 340px;
+  height: 400px;
+  @include mobile {
+    width: 170px;
+    height: 200px;
+  }
+}
+
+.isOpened .featureImage:nth-of-type(3) {
+  transform: translateY(50px);
+  width: 240px;
+  height: 400px;
+  @include mobile {
+    transform: translateY(10px);
+    width: 168px;
+    height: 230px;
+  }
+}
+
+.verticalMargin {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.horizontalMargin {
+  margin-right: 20px;
+  margin-left: 20px;
 }
 
 .videoContainer {
-  width: 450px;
+  height: 230px;
   @include mobile {
-    width: 200px;
+    height: 95px;
+  }
+  video {
+    width: auto;
+    height: 100%;
   }
 }
 
-.largeVideoContainer {
-  width: 800px;
+.videoContainer.largeVideo {
+  height: 420px;
   @include mobile {
-    width: 400px;
+    height: 200px;
   }
 }
 
 .title {
-  font-size: 40px;
+  font-size: 35px;
   margin-bottom: 30px;
   @include mobile {
-    font-size: 20px;
+    font-size: 18px;
+    margin-bottom: 10px;
   }
 }
 
-.blurBox {
-  max-height: 100%;
-  padding: 20px;
+.infoBox {
+  position: relative;
   background-color: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  filter: brightness(1.5) saturate(140%);
+  // filter: brightness(1.5) saturate(140%);
+  padding: 20px;
   @include mobile {
-    padding: 0px;
+    padding: 5px 15px;
   }
   p {
-    font-size: 20px;
+    font-size: 18px;
     @include mobile {
-      font-size: 14px;
+      margin: 4px 0;
+      font-size: 12px;
     }
+  }
+  img {
+    width: auto;
+    height: 100px;
+  }
+}
+
+.learnMore {
+  display: inline-block;
+  font-family: "Avenir";
+  color: white;
+  background: linear-gradient(to left, #030303FF 0%, #29292966 80%, #56565644 100%);
+  font-size: 16px;
+  padding: 5px 30px;
+  cursor: pointer;
+  @include mobile {
+    font-size: 13px;
+    padding: 3px 12px;
   }
 }
 
@@ -232,30 +345,23 @@ video {
   border: 1px solid red;
   width: 150px;
   height: 150px;
-  margin-right: 15px;
+  margin: 0 15px 10px 0;
   object-fit: cover;
   @include mobile {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
   }
 }
 
 .squareImage {
   width: 110px;
   height: 110px;
-  margin-right: 15px;
+  margin: 0 15px 10px 0;
   object-fit: cover;
   @include mobile {
-    width: 60px;
-    height: 60px;
+    width: 55px;
+    height: 55px;
   }
-}
-
-.redLinesImage {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  object-fit: contain;
 }
 
 .audio {
@@ -271,15 +377,22 @@ video {
 
 .audioLabel {
   font-size: 14px;
+  @include mobile {
+    font-size: 12px;
+  }
 }
 
 .audioIcon {
-  width: 40px;
-  height: 40px;
   background-image: url("../assets/icons/icon-audio.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  width: 40px;
+  height: 40px;
+  @include mobile {
+    width: 30px;
+    height: 30px;
+  }
 }
 
 .sep {
@@ -299,5 +412,231 @@ video {
     height: 20px;
     border-radius: 10px;
     background-color: black;
+    @include mobile {
+      width: 16px;
+      height: 16px;
+      border-radius: 8px;
+    }
+  }
+}
+
+.org {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 250px;
+  @include mobile {
+    width: 200px;
+    // transform: scale(0.5);
+  }
+  .logo {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    @include mobile {
+      // width: 200px;
+      transform: scale(0.5);
+    }
+  }
+  #dbsLogo {
+    background-image: url("../assets/images/moko_logo.png");
+    height: 120px;
+    width: 200px;
+  }
+  #warnerLogo {
+    background-image: url("../assets/images/moko_logo.png");
+    height: 120px;
+    width: 200px;
+  }
+  #mokoLogo {
+    background-image: url("../assets/images/moko_logo.png");
+    height: 120px;
+    width: 200px;
+  }
+  #hkgdaLogo {
+    background-image: url("../assets/images/moko_logo.png");
+    height: 120px;
+    width: 200px;
+  }
+}
+
+#content1 {
+  .infoBox {
+    align-self: flex-start;
+    padding-right: 300px;
+    @include mobile {
+      padding-right: 150px;
+    }
+  }
+}
+
+#content3 {
+  .title {
+    position: absolute;
+    left: -240px;
+    @include mobile {
+      left: -150px;
+    }
+  }
+  .infoBox {
+    align-self: flex-start;
+    padding-right: 300px;
+    @include mobile {
+      padding-right: 150px;
+    }
+  }
+}
+
+#content5 {
+  .heading {
+    height: 60px;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 35px;
+    @include mobile {
+      height: 20px;
+      font-size: 20px;
+    }
+    img {
+      height: 100%;
+      width: auto;
+      margin-right: 5px;
+    }
+  }
+  .infoBox {
+    position: absolute;
+    bottom: 15vh;
+    right: 0;
+    padding-right: 80px;
+    padding-bottom: 100px;
+    @include mobile {
+      padding-right: 80px;
+      padding-bottom: 50px;
+    }
+  }
+  .title {
+    height: 60px;
+  }
+}
+
+#content6 {
+  #contactUs {
+    display: flex;
+    justify-content: center;
+    width: 800px;
+    padding-top: 120px;
+    @include mobile {
+      padding-top: 80px;
+      width: 500px;
+    }
+    .heading {
+      color: white;
+      font-size: 35px;
+      @include mobile {
+        font-size: 20px;
+      }
+      img {
+        height: 35px;
+        width: auto;
+        margin-left: 10px;
+        margin-bottom: -5px;
+      }
+    }
+  }
+  .flexFill {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+  }
+  .appInfo {
+    position: relative;
+    height: 85.17%;
+    img {
+      position: relative;
+      height: 100%;
+      width: auto;
+    }
+    .icon {
+      width: 25px;
+      height: 25px;
+      margin-right: 10px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      @include mobile {
+        width: 12px;
+        height: 12px;
+      }
+    }
+    #instagramIcon {
+      background-image: url("../assets/icons/icon-instagram.png");
+    }
+    #facebookIcon {
+      background-image: url("../assets/icons/icon-facebook.png");
+    }
+    .row {
+      align-items: center;
+      margin: 5px 0;
+    }
+    a {
+      color: white;
+      text-decoration: unset;
+      font-size: 20px;
+      @include mobile {
+        font-size: 10px;
+      }
+    }
+    p {
+      color: white;
+      font-size: 20px;
+      @include mobile {
+        font-size: 14px;
+      }
+    }
+    .downloadButton {
+      margin: 0 2px;
+      width: 150px;
+      height: 44px;
+      @include mobile {
+        width: 80px;
+        height: 24px;
+      }
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    #downloadIos {
+      background-image: url("../assets/images/download_android.png");
+    }
+    #downloadAndroid {
+      background-image: url("../assets/images/download_ios.png");
+    }
+  }
+  .mountain {
+    position: relative;
+    height: 85.17%;
+    img {
+      height: 100%;
+      width: auto;
+    }
+  }
+  .org {
+    color: white;
+  }
+}
+
+#content7 {
+  .orgWrapper {
+    height: 85.17%;
+    display: flex;
+    align-items: center;
   }
 }
