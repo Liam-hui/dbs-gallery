@@ -22,7 +22,13 @@ export default function InfoBox(props) {
   const { children, style, audio, learnMore, parallax, offset } = props;
 
   return (
-    <div className={`infoBox${parallax ? ' parallaxElement' : ''}`} style={style} data-offset={offset}>
+    <div 
+      className={`infoBox${parallax ? ' parallaxElement' : ''}`} 
+      style={{
+        ...style,
+        '--offset': offset
+      }}
+    >
       {children}
       {learnMore &&
         <LearnMore/>

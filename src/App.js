@@ -4,6 +4,7 @@ import store from './store';
 
 import Cover from '@/pages/Cover';
 import Gallery from '@/pages/Gallery';
+import LinesCanvas from '@/pages/LinesCanvas';
 
 import '@/styles/styles.css';
 
@@ -14,7 +15,9 @@ function App() {
 
   useEffect(() => {
     setTimeout(
-      () => setIsLandscape(window.innerWidth > window.innerHeight)
+      () => {
+        setIsLandscape(window.innerWidth > window.innerHeight);
+      }
     , 500)
   }, []); 
 
@@ -24,7 +27,7 @@ function App() {
     clearTimeout(resizeLoop);
     resizeLoop = setTimeout(doneResizing, 500);
   });
-  function doneResizing() {
+  const doneResizing = () => {
     setIsLandscape(window.innerWidth > window.innerHeight)
   }
 

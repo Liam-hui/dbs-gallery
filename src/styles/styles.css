@@ -46,6 +46,12 @@ div {
   transition: opacity 0.5s ease-in-out;
 }
 
+#linesCanvas {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
 .isLandscape #cover {
   opacity: 0;
   pointer-events: none;
@@ -129,7 +135,6 @@ div {
   height: 100%;
   flex-shrink: 0;
   display: inline-flex;
-  background-image: url("../assets/images/bgTile.png");
   background-size: auto 100%;
   background-repeat: repeat-x;
   padding-right: 30vw;
@@ -137,6 +142,10 @@ div {
 }
 #scrollContent > div {
   flex-shrink: 0;
+}
+
+.isOpened #scrollContent {
+  padding-right: 0;
 }
 
 .contentContainer {
@@ -179,26 +188,9 @@ div {
   position: relative;
   width: 160px;
   height: 400px;
-  object-fit: cover;
   margin-top: 10vh;
   opacity: 0;
   box-shadow: 0px 3px 15px 2px rgba(0, 0, 0, 0.25);
-}
-.featureImage:nth-of-type(odd) {
-  transform: translateY(-15px);
-}
-@media (max-width: 850px) {
-  .featureImage:nth-of-type(odd) {
-    transform: translateY(-10px);
-  }
-}
-.featureImage:nth-of-type(even) {
-  transform: translateY(15px);
-}
-@media (max-width: 850px) {
-  .featureImage:nth-of-type(even) {
-    transform: translateY(10px);
-  }
 }
 @media (max-width: 850px) {
   .featureImage {
@@ -206,21 +198,46 @@ div {
     height: 225px;
   }
 }
-
-.featureImage:nth-of-type(1) {
+.featureImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.featureImage#featureImage0 {
   transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out 2.4s;
+  transform: translateY(-15px);
 }
-
-.featureImage:nth-of-type(2) {
+@media (max-width: 850px) {
+  .featureImage#featureImage0 {
+    transform: translateY(-10px);
+  }
+}
+.featureImage#featureImage1 {
   transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out 2.6s;
+  transform: translateY(15px);
 }
-
-.featureImage:nth-of-type(3) {
+@media (max-width: 850px) {
+  .featureImage#featureImage1 {
+    transform: translateY(10px);
+  }
+}
+.featureImage#featureImage2 {
   transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out 2.8s;
+  transform: translateY(-15px);
 }
-
-.featureImage:nth-of-type(4) {
+@media (max-width: 850px) {
+  .featureImage#featureImage2 {
+    transform: translateY(-10px);
+  }
+}
+.featureImage#featureImage3 {
   transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out 3s;
+  transform: translateY(15px);
+}
+@media (max-width: 850px) {
+  .featureImage#featureImage3 {
+    transform: translateY(10px);
+  }
 }
 
 .isLandscape .featureImage {
@@ -240,28 +257,40 @@ div {
   }
 }
 
-.isOpened .featureImage:nth-of-type(1) {
+.isOpened #featureImage0 {
   width: 340px;
   height: 400px;
 }
 @media (max-width: 850px) {
-  .isOpened .featureImage:nth-of-type(1) {
+  .isOpened #featureImage0 {
     width: 170px;
     height: 200px;
   }
 }
 
-.isOpened .featureImage:nth-of-type(3) {
+.isOpened #featureImage2 {
   transform: translateY(50px);
   width: 240px;
   height: 400px;
 }
 @media (max-width: 850px) {
-  .isOpened .featureImage:nth-of-type(3) {
+  .isOpened #featureImage2 {
     transform: translateY(10px);
     width: 168px;
     height: 230px;
   }
+}
+
+.line {
+  position: absolute;
+  width: 0;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out, width 1.5s ease-in-out;
+}
+.line.isDrawn {
+  width: 100vw;
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out, width 1.5s ease-in-out;
 }
 
 .verticalMargin {
@@ -275,7 +304,7 @@ div {
 }
 
 .videoContainer {
-  height: 230px;
+  height: 210px;
 }
 @media (max-width: 850px) {
   .videoContainer {
@@ -297,8 +326,8 @@ div {
 }
 
 .title {
-  font-size: 35px;
-  margin-bottom: 30px;
+  font-size: 33px;
+  margin-bottom: 25px;
 }
 @media (max-width: 850px) {
   .title {
@@ -312,7 +341,7 @@ div {
   background-color: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  padding: 20px;
+  padding: 15px 20px;
 }
 @media (max-width: 850px) {
   .infoBox {
@@ -321,6 +350,7 @@ div {
 }
 .infoBox p {
   font-size: 18px;
+  margin: 8px 0;
 }
 @media (max-width: 850px) {
   .infoBox p {
@@ -337,7 +367,7 @@ div {
   display: inline-block;
   font-family: "Avenir";
   color: white;
-  background: linear-gradient(to left, #030303FF 0%, #29292966 80%, #56565644 100%);
+  background: linear-gradient(to left, #030303FF 60%, #29292966 90%, #56565644 100%);
   font-size: 16px;
   padding: 5px 30px;
   cursor: pointer;
@@ -443,10 +473,12 @@ div {
   flex-direction: column;
   align-items: center;
   width: 250px;
+  --offset: -300;
 }
 @media (max-width: 850px) {
   .org {
     width: 200px;
+    --offset: -250;
   }
 }
 .org .logo {
@@ -514,7 +546,7 @@ div {
   justify-content: center;
   align-items: center;
   color: white;
-  font-size: 35px;
+  font-size: 40px;
 }
 @media (max-width: 850px) {
   #content5 .heading {
@@ -604,6 +636,7 @@ div {
   #content6 .appInfo .icon {
     width: 12px;
     height: 12px;
+    margin-right: 4px;
   }
 }
 #content6 .appInfo #instagramIcon {
@@ -645,8 +678,8 @@ div {
 }
 @media (max-width: 850px) {
   #content6 .appInfo .downloadButton {
-    width: 80px;
-    height: 24px;
+    width: 70px;
+    height: 21px;
   }
 }
 #content6 .appInfo #downloadIos {
@@ -665,6 +698,7 @@ div {
 }
 #content6 .org {
   color: white;
+  font-size: 14px;
 }
 
 #content7 .orgWrapper {

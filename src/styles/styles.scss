@@ -72,6 +72,12 @@ div {
   transition: opacity 0.5s ease-in-out ;
 }
 
+#linesCanvas {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
 .isLandscape #cover {
   opacity: 0;
   pointer-events: none;
@@ -152,7 +158,7 @@ div {
   height: 100%;
   flex-shrink: 0;
   display: inline-flex;
-  background-image: url("../assets/images/bgTile.png");
+  // background-image: url("../assets/images/bgTile.png");
   background-size: auto 100%;
   background-repeat: repeat-x;
   padding-right: 30vw;
@@ -163,7 +169,7 @@ div {
 }
 
 .isOpened #scrollContent {
-  // padding-right: 0;
+  padding-right: 0;
 }
 
 .contentContainer {
@@ -204,31 +210,45 @@ div {
   position: relative;
   width: 160px;
   height: 400px;
-  object-fit: cover;
   margin-top: 10vh;
   opacity: 0;
   box-shadow: 0px 3px 15px 2px rgba(0,0,0,0.25);
-  &:nth-of-type(odd) {
+  @include mobile {
+    width: 90px;
+    height: 225px;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  &#featureImage0 {
+    transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out 2.4s;
     transform: translateY(-15px);
     @include mobile {
       transform: translateY(-10px);
     }
   }
-  &:nth-of-type(even) {
+  &#featureImage1 {
+    transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out 2.6s;
     transform: translateY(15px);
     @include mobile {
       transform: translateY(10px);
     }
   }
-  @include mobile {
-    width: 90px;
-    height: 225px;
+  &#featureImage2 {
+    transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out 2.8s;
+    transform: translateY(-15px);
+    @include mobile {
+      transform: translateY(-10px);
+    }
   }
-}
-
-@for $i from 0 to 4 {
-  .featureImage:nth-of-type(#{$i + 1}) {
-    transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out ( $i * 0.2s + 2.4s );
+  &#featureImage3 {
+    transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out 3s;
+    transform: translateY(15px);
+    @include mobile {
+      transform: translateY(10px);
+    }
   }
 }
 
@@ -247,7 +267,7 @@ div {
   }
 }
 
-.isOpened .featureImage:nth-of-type(1) {
+.isOpened #featureImage0 {
   width: 340px;
   height: 400px;
   @include mobile {
@@ -256,7 +276,7 @@ div {
   }
 }
 
-.isOpened .featureImage:nth-of-type(3) {
+.isOpened #featureImage2 {
   transform: translateY(50px);
   width: 240px;
   height: 400px;
@@ -264,6 +284,18 @@ div {
     transform: translateY(10px);
     width: 168px;
     height: 230px;
+  }
+}
+
+.line {
+  position: absolute;
+  width: 0;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out, width 1.5s ease-in-out;
+  &.isDrawn {
+    width: 100vw;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out, width 1.5s ease-in-out;
   }
 }
 
@@ -278,7 +310,7 @@ div {
 }
 
 .videoContainer {
-  height: 230px;
+  height: 210px;
   @include mobile {
     height: 95px;
   }
@@ -296,8 +328,8 @@ div {
 }
 
 .title {
-  font-size: 35px;
-  margin-bottom: 30px;
+  font-size: 33px;
+  margin-bottom: 25px;
   @include mobile {
     font-size: 18px;
     margin-bottom: 10px;
@@ -310,12 +342,13 @@ div {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   // filter: brightness(1.5) saturate(140%);
-  padding: 20px;
+  padding: 15px 20px;
   @include mobile {
     padding: 5px 15px;
   }
   p {
     font-size: 18px;
+    margin: 8px 0;
     @include mobile {
       margin: 4px 0;
       font-size: 12px;
@@ -331,7 +364,7 @@ div {
   display: inline-block;
   font-family: "Avenir";
   color: white;
-  background: linear-gradient(to left, #030303FF 0%, #29292966 80%, #56565644 100%);
+  background: linear-gradient(to left, #030303FF 60%, #29292966 90%, #56565644 100%);
   font-size: 16px;
   padding: 5px 30px;
   cursor: pointer;
@@ -425,9 +458,10 @@ div {
   flex-direction: column;
   align-items: center;
   width: 250px;
+  --offset: -300;
   @include mobile {
     width: 200px;
-    // transform: scale(0.5);
+    --offset: -250;
   }
   .logo {
     background-size: contain;
@@ -493,7 +527,7 @@ div {
     justify-content: center;
     align-items: center;
     color: white;
-    font-size: 35px;
+    font-size: 40px;
     @include mobile {
       height: 20px;
       font-size: 20px;
@@ -574,6 +608,7 @@ div {
       @include mobile {
         width: 12px;
         height: 12px;
+        margin-right: 4px;
       }
     }
     #instagramIcon {
@@ -606,8 +641,8 @@ div {
       width: 150px;
       height: 44px;
       @include mobile {
-        width: 80px;
-        height: 24px;
+        width: 70px;
+        height: 21px;
       }
       background-size: contain;
       background-repeat: no-repeat;
@@ -630,6 +665,7 @@ div {
   }
   .org {
     color: white;
+    font-size: 14px;
   }
 }
 

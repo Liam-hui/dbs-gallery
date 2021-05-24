@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { isMobile } from 'react-device-detect';
 import ScrollMagic from "scrollmagic";
-// import "../../../node_modules/scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators";
+import "../../../node_modules/scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators";
 
+import LinesCanvas from '@/pages/LinesCanvas';
 import Content from '@/components/Content'
 import Sep from '@/components/Sep'
 import InfoBox from '@/components/InfoBox'
@@ -27,12 +28,13 @@ function Gallery({ canScroll }) {
 
   useEffect(() => {
 
+    // parallax scrolling
     const parallaxElements = document.querySelectorAll(".parallaxElement");
     for (const element of parallaxElements) {
-      const offset = element.dataset.offset;
+      const offset = getComputedStyle(element).getPropertyValue('--offset');
       new ScrollMagic.Scene({
         triggerElement: element,
-        offset: offset ?? 0,												 
+        offset: offset != '' ? offset : 0,												 
         triggerHook: 0.65,
       })
       .setClassToggle(element, "animated")
@@ -50,8 +52,71 @@ function Gallery({ canScroll }) {
     // .addIndicators({ }) 
     .addTo(controller);
 
+    // show lines
+    const linesSources = document.querySelectorAll(".linesSource");
+    for (const element of linesSources) {
+      new ScrollMagic.Scene({
+        triggerElement: element,											 
+        triggerHook: 0.2,
+      })
+      .on("enter", function (e) {
+        showLines(element);
+      })
+      .on("leave", function (e) {
+        hideLines(element);
+      })
+      .addIndicators({ }) 
+      .addTo(controller);
+    }
+      
 
   }, []); 
+
+
+  const showLines = (element) => {
+    const lines = element.querySelectorAll(`.line`);
+    for (const line of lines) {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const image = element.querySelector("img")
+
+      const x = line.dataset.x;
+      const y = line.dataset.y;
+      const height = line.dataset.height;
+
+      canvas.width = 1;
+      canvas.height = image.naturalHeight * height;
+
+      const isWide = image.naturalHeight / image.naturalWidth < image.offsetHeight / image.offsetWidth;
+      const imageAdjustedHeight = isWide ? image.naturalHeight : image.naturalWidth * image.offsetHeight/image.offsetWidth;
+      const imageAdjustedWidth = isWide ? image.naturalHeight * image.offsetWidth/image.offsetHeight : image.naturalWidth;
+
+      ctx.drawImage(
+        image, // source
+        (image.naturalWidth - imageAdjustedWidth) * 0.5 + imageAdjustedWidth * x,  // source_start_x
+        (image.naturalHeight - imageAdjustedHeight) * 0.5 + imageAdjustedHeight * y, // source_start_y
+        1, // source_width
+        imageAdjustedHeight * height, // source_height
+        0, // canvas_start_x
+        0, // canvas_start_y
+        1, // draw_width
+        image.offsetHeight * height // draw_height
+      );
+
+      line.style.left = x * 100 + '%';
+      line.style.top =  y * 100 + '%';
+      line.style.height = image.offsetHeight * height + 'px';
+      line.style.background = "url(" + canvas.toDataURL() + ")";
+      line.classList.add("isDrawn");
+    }
+  }
+
+  const hideLines = (element) => {
+    const lines = element.querySelectorAll(`.line`);
+    for (const line of lines) {
+      line.classList.remove("isDrawn");
+    }
+  }
 
   const onWheel = (e) => {
     // e.preventDefault()
@@ -89,8 +154,12 @@ function Gallery({ canScroll }) {
           </InfoBox>
         </div>
         
-        <img className='featureImage' src={featureImage1}/>
-
+        <div className='featureImage linesSource' id="featureImage0">
+          <img src={featureImage1}/>
+          <div className="line" data-x="0.5" data-y="0.5" data-height="0.15"/>
+          <div className="line" data-x="0.7" data-y="0.2" data-height="0.1"/>
+        </div>
+        
         <Content index={0}>
           <div style={{ height: window.innerHeight - 70, marginTop: 'auto'}}>
             <Sep/>
@@ -123,7 +192,7 @@ function Gallery({ canScroll }) {
                   圍繞這年周遭生活人、事、物的照片（中性）
                 </p>
                 <p>
-                  DBS相位：
+                  <img className='parallaxElement' src="https://images.ctfassets.net/hrltx12pl8hq/7yQR5uJhwEkRfjwMFJ7bUK/dc52a0913e8ff8b5c276177890eb0129/offset_comp_772626-opt.jpg?fit=fill&w=800&h=300"/>
                   <br></br>
                   Klook 與 DBS 同事相討疫情對策
                 </p>
@@ -132,7 +201,11 @@ function Gallery({ canScroll }) {
           </div>
         </Content>
 
-        <img className='featureImage' src={featureImage2}/>
+        <div className='featureImage linesSource' id="featureImage1">
+          <img src={featureImage2}/>
+          <div className="line" data-x="0.5" data-y="0.5" data-height="0.15"/>
+          <div className="line" data-x="0.7" data-y="0.2" data-height="0.1"/>
+        </div>
 
         <Content index={1}>
           <div>
@@ -169,7 +242,7 @@ function Gallery({ canScroll }) {
                 在這年大家所遇到的困難及壞景況
               </p>
               <p>
-                DBS相位：
+                <img className='parallaxElement' src="https://images.ctfassets.net/hrltx12pl8hq/7yQR5uJhwEkRfjwMFJ7bUK/dc52a0913e8ff8b5c276177890eb0129/offset_comp_772626-opt.jpg?fit=fill&w=800&h=300"/>
                 <br></br>
                 採購部同事 Alison
                 <br></br>
@@ -208,7 +281,9 @@ function Gallery({ canScroll }) {
           </div>
         </Content>
 
-        <img className='featureImage' src={featureImage3}/>
+        <div className='featureImage' id="featureImage2">
+          <img src={featureImage3}/>
+        </div>
 
         <Content index={3}>
           <div className='title parallaxElement'>
@@ -255,7 +330,9 @@ function Gallery({ canScroll }) {
           </div>
         </Content>
 
-        <img className='featureImage' src={featureImage4}/>
+        <div className='featureImage' id="featureImage3">
+          <img src={featureImage4}/>
+        </div>
 
         <Content index={4}>
           <div className='parallaxElement' style={{ height: window.innerHeight - 70, marginTop: 'auto'}}>
@@ -293,12 +370,12 @@ function Gallery({ canScroll }) {
                   圍繞這年周遭生活人、事、物的照片（中性）
                 </p>
                 <p>
-                  DBS相位：
+                  <img className='parallaxElement' src="https://images.ctfassets.net/hrltx12pl8hq/7yQR5uJhwEkRfjwMFJ7bUK/dc52a0913e8ff8b5c276177890eb0129/offset_comp_772626-opt.jpg?fit=fill&w=800&h=300"/>
                   <br></br>
                   Klook 與 DBS 同事相討疫情對策
                 </p>
               </InfoBox>
-              <div>
+              <div className="horizontalMargin">
                 <div className='row verticalMargin'>
                   <img className='squareImage parallaxElement' src="https://images.ctfassets.net/hrltx12pl8hq/7yQR5uJhwEkRfjwMFJ7bUK/dc52a0913e8ff8b5c276177890eb0129/offset_comp_772626-opt.jpg?fit=fill&w=800&h=300"/>
                   <img className='squareImage parallaxElement' src="https://images.ctfassets.net/hrltx12pl8hq/7yQR5uJhwEkRfjwMFJ7bUK/dc52a0913e8ff8b5c276177890eb0129/offset_comp_772626-opt.jpg?fit=fill&w=800&h=300"/>
@@ -315,7 +392,7 @@ function Gallery({ canScroll }) {
         <Content index={5}>
           <div>
             <div className='row verticalMargin heading parallaxElement'>
-              <img className='' src={dbsLogoImage}/>
+              <img src={dbsLogoImage}/>
               與你同行
             </div>
             <div className='videoContainer largeVideo parallaxElement'>
@@ -420,6 +497,30 @@ function Gallery({ canScroll }) {
       </div>
     </div>
   );
+}
+
+const getPosition = (el) => {
+  var xPos = 0;
+  var yPos = 0;
+ 
+  while (el) {
+    if (el.tagName == "BODY") {
+      var xScroll = el.scrollLeft || document.documentElement.scrollLeft;
+      var yScroll = el.scrollTop || document.documentElement.scrollTop;
+ 
+      xPos += (el.offsetLeft - xScroll + el.clientLeft);
+      yPos += (el.offsetTop - yScroll + el.clientTop);
+    } else {
+      xPos += (el.offsetLeft - el.scrollLeft + el.clientLeft);
+      yPos += (el.offsetTop - el.scrollTop + el.clientTop);
+    }
+ 
+    el = el.offsetParent;
+  }
+  return {
+    x: xPos,
+    y: yPos
+  };
 }
 
 export default Gallery;
