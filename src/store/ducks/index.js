@@ -1,16 +1,17 @@
 import { combineReducers } from 'redux';
 
-const screenReducer = ( state = { width: window.innerWidth, height: window.innderHeight }, action ) => {
+const featureImagePositionReducer = ( state = 0, action ) => {
   switch( action.type ) {
-    case 'SET_SCREEN':
-      return {
-        ... action.payload
-      };
+    case 'SET_FEATURE_IMAGE_POSITION':
+      console.log('asdfasdf', action.payload)
+      return action.payload;
     default: return state;
   }
 }
 
-export default () =>
-  combineReducers({
-    screen: screenReducer
-  });
+const reducers = combineReducers({
+  default: () => [],
+    featureImagePosition: featureImagePositionReducer
+});
+
+export default reducers;

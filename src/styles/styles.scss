@@ -1,12 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap');
 
 @font-face {
   font-family: "Avenir";
   src: url("../assets/fonts/Avenir-Book.ttf");
 }
 
-$tablet-width: 768px;
-$desktop-width: 1024px;
+// $tablet-width: 768px;
+// $desktop-width: 1024px;
 
 @mixin mobile {
   @media (max-width: #{850px}) {
@@ -41,6 +43,7 @@ html, body, #root {
 
 div {
   box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .row {
@@ -52,6 +55,16 @@ div {
 .column {
   display: flex;
   flex-direction: column;
+}
+
+.vertical-margin {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.horizontal-margin {
+  margin-right: 20px;
+  margin-left: 20px;
 }
 
 #cover {
@@ -71,14 +84,7 @@ div {
   z-index: 99;
   transition: opacity 0.5s ease-in-out ;
 }
-
-#linesCanvas {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-}
-
-.isLandscape #cover {
+.is-landscape #cover {
   opacity: 0;
   pointer-events: none;
   transition: opacity 1s ease-in-out 1s;
@@ -86,118 +92,116 @@ div {
 
 #intro {
   position: relative;
-  width: 50vw;
+  width: 60vw;
   height: 100%;
   z-index: 1;
   padding-left: 220px;
   @include mobile {
+    width: 400px;
     padding-left: 80px;
   }
-  .infoBox {
+  p {
     position: absolute;
-    top: 35%;
-    height: 40%;
-    width: 50%;
+    top: 30%;
+    left: 28%;
     opacity: 0;
     transition: opacity 0.5s ease-in-out 2.5s;
+    font-size: 24px;
     @include mobile {
-      width: 70%;
-      height: unset;
+      top: 28%;
+      font-size: 12px;
+    }
+    h1 {
+      font-size: 1.6em;
+      margin-top: 20px;
+      @include mobile {
+        margin-top: 15px;
+      }
+    }
+  }
+  .rays {
+    position: absolute;
+    bottom: -70px;
+    right: -70px;
+    width: 150px;
+    height: auto;
+    @include mobile {
+      width: 80px;
+      bottom: -40px;
+      right: -40px;
     }
   }
 }
-
-.isLandscape #intro .infoBox {
+.is-landscape #intro p {
   opacity: 1;
 }
 
 #banner {
   position: absolute;
-  top: 0;
+  text-align: end;
+  top: 30vh;
   left: 0;
   width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   transition: all 0.7s ease-in-out 2s;
   img {
-    position: absolute;
-    right: 0;
     width: 80%;
     height: auto;
   }
 }
-
-.isLandscape #banner{
+.is-landscape #banner {
   width: 100%;
-  height: 25%;
   top: 10%;
 }
 
-#galleryContainer {
+#gallery-container {
   position: relative;
   height: 100%;
   overflow-y: hidden;
 }
 
-
-#bgFirst {
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  img {
-    height: 100%;
-    width: auto;
-  }
-}
-
-#scrollContent {
+#scroll-content {
   position: relative;
   height: 100%;
-  flex-shrink: 0;
   display: inline-flex;
-  // background-image: url("../assets/images/bgTile.png");
+  background-image: url("../assets/images/bg_tile.png");
   background-size: auto 100%;
   background-repeat: repeat-x;
-  padding-right: 30vw;
+  // padding-right: 30vw;
+  min-width: 12000px;
   transition: padding-right 0.5s ease-in-out;
-  & > div {
-    flex-shrink: 0;
+  #bg-start {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    img {
+      height: 100%;
+      width: auto;
+    }
   }
 }
-
-.isOpened #scrollContent {
-  padding-right: 0;
+.is-opened #scroll-content {
+  min-width: unset;
 }
 
-.contentContainer {
+.content-container {
+  position: relative;
   height: 100%;
   pointer-events: none;
-  overflow: hidden;
+  display: inline-flex;
   opacity: 0;
-  width: 0;
-  transition: width 1s ease-in-out, opacity 1s ease-in-out;
-  padding-top: 50px;
+  transition:  opacity 1s ease-in-out;
+  padding: 50px 20px 0 20px;
   @include mobile {
-    padding-top: 8px;
-  }
-  & > div {
-    height: 100%;
-    display: inline-flex;
-    padding: 0 20px;
+    padding: 8px 10px 0 10px;
   }
 }
-
-.isOpened .contentContainer {
+.is-opened .content-container {
   pointer-events: unset;
   opacity: 1;
-  overflow: unset;
-  width: var(--contentWidth);
 }
 
-.parallaxElement {
+.parallax-element {
   opacity: 0;
   &.animated {
     opacity: 1;
@@ -206,13 +210,12 @@ div {
   -webkit-transition: opacity 0.5s ease-in;
 }
 
-.featureImage {
+.feature-image-wrapper {
   position: relative;
   width: 160px;
   height: 400px;
   margin-top: 10vh;
   opacity: 0;
-  box-shadow: 0px 3px 15px 2px rgba(0,0,0,0.25);
   @include mobile {
     width: 90px;
     height: 225px;
@@ -222,121 +225,167 @@ div {
     height: 100%;
     object-fit: cover;
   }
-  &#featureImage0 {
+  & > div {
+    width: 100%;
+    height: 100%;
+    box-shadow: 0px 3px 15px 2px rgba(0,0,0,0.25);
+    transition: transform 0.5s ease-in-out;
+  }
+  &#feature-image-1 {
     transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out 2.4s;
-    transform: translateY(-15px);
-    @include mobile {
-      transform: translateY(-10px);
+    img {
+      object-position: 42% 0%;
     }
   }
-  &#featureImage1 {
+  &#feature-image-2 {
     transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out 2.6s;
-    transform: translateY(15px);
-    @include mobile {
-      transform: translateY(10px);
+    & > div {
+      transform: translateY(35px);
+      @include mobile {
+        transform: translateY(20px);
+      }
+    }
+    img {
+      object-position: 48% 50%;
     }
   }
-  &#featureImage2 {
+  &#feature-image-3 {
     transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out 2.8s;
-    transform: translateY(-15px);
-    @include mobile {
-      transform: translateY(-10px);
-    }
   }
-  &#featureImage3 {
+  &#feature-image-4 {
     transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out 3s;
-    transform: translateY(15px);
-    @include mobile {
-      transform: translateY(10px);
+    & > div {
+      transform: translateY(35px);
+      @include mobile {
+        transform: translateY(20px);
+      }
     }
   }
 }
-
-.isLandscape .featureImage {
+.is-landscape .feature-image-wrapper {
   opacity: 1;
 }
-
-.isOpened .featureImage {
-  opacity: 1;
+.is-opened .feature-image-wrapper {
+  transform: unset !important;
   width: 450px;
   height: 360px;
-  transform: unset;
   @include mobile {
     width: 250px;
     height: 200px;
   }
+  & > div {
+    transform: unset !important;
+  }
 }
-
-.isOpened #featureImage0 {
-  width: 340px;
-  height: 400px;
+.is-opened #feature-image-1 {
+  width: 360px;
+  height: 430px;
   @include mobile {
-    width: 170px;
-    height: 200px;
+    width: 176px;
+    height: 210px;
+  }
+}
+// .is-opened #feature-image-2 {
+//   width: 370px;
+//   height: 430px;
+//   @include mobile {
+//     width: 181px;
+//     height: 210px;
+//   }
+// }
+// .is-opened #feature-image-3 {
+//   transform: translateY(50px);
+//   width: 240px;
+//   height: 430px;
+//   @include mobile {
+//     transform: translateY(10px);
+//     width: 168px;
+//     height: 230px;
+//   }
+// }
+
+.lines-source {
+  position: relative;
+  .line {
+    position: absolute;
+    width: 0;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out, width 1.5s ease-in-out;
+    &.is-drawn {
+      width: 100vw;
+      opacity: 1;
+      transition: opacity 0.5s ease-in-out, width 1.5s ease-in-out;
+    }
   }
 }
 
-.isOpened #featureImage2 {
-  transform: translateY(50px);
-  width: 240px;
-  height: 400px;
+.video-wrapper {
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 276px;
+  height: 500px;
   @include mobile {
-    transform: translateY(10px);
-    width: 168px;
     height: 230px;
-  }
-}
-
-.line {
-  position: absolute;
-  width: 0;
-  opacity: 0;
-  transition: opacity 1.5s ease-in-out, width 1.5s ease-in-out;
-  &.isDrawn {
-    width: 100vw;
-    opacity: 1;
-    transition: opacity 0.5s ease-in-out, width 1.5s ease-in-out;
-  }
-}
-
-.verticalMargin {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-.horizontalMargin {
-  margin-right: 20px;
-  margin-left: 20px;
-}
-
-.videoContainer {
-  height: 210px;
-  @include mobile {
-    height: 95px;
+    width: 125px;
   }
   video {
-    width: auto;
+    width: 100%;
     height: 100%;
-  }
-}
-
-.videoContainer.largeVideo {
-  height: 420px;
-  @include mobile {
-    height: 200px;
+    object-fit: cover;
   }
 }
 
 .title {
-  font-size: 33px;
-  margin-bottom: 25px;
+  position: relative;
+  font-size: 38px;
+  line-height: 1.25;
+  margin-bottom: 8px;
   @include mobile {
-    font-size: 18px;
-    margin-bottom: 10px;
+    font-size: 20px;
+    margin-bottom: 3px;
   }
 }
 
-.infoBox {
+.storyCreditText {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+  @include mobile {
+    font-size: 6px;
+    margin-bottom: 3px;
+  }
+}
+
+.photoCreditText {
+  color: #707070;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 12px;
+  @include mobile {
+    font-size: 8px;
+  }
+}
+
+.photo {
+  display: block;
+  width: auto;
+  height: 110px;
+  margin: 0 15px 10px 0;
+  @include mobile {
+    height: 58px;
+    margin: 0 5px 5px 0;
+  }
+  &.isHorizontal {
+    width: 110px;
+    height: auto;
+    @include mobile {
+      width: 58px;
+    }
+  }
+}
+
+.info-box {
   position: relative;
   background-color: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(12px);
@@ -348,52 +397,26 @@ div {
   }
   p {
     font-size: 18px;
+    line-height: 1.4;
     margin: 8px 0;
     @include mobile {
       margin: 4px 0;
-      font-size: 12px;
+      font-size: 9px;
     }
-  }
-  img {
-    width: auto;
-    height: 100px;
   }
 }
 
-.learnMore {
+.learn-more {
   display: inline-block;
   font-family: "Avenir";
   color: white;
-  background: linear-gradient(to left, #030303FF 60%, #29292966 90%, #56565644 100%);
+  background: linear-gradient(to left, #ED1C24FF 50%,  #ED1C2400 100%);
   font-size: 16px;
-  padding: 5px 30px;
+  padding: 4px 33px;
   cursor: pointer;
   @include mobile {
-    font-size: 13px;
-    padding: 3px 12px;
-  }
-}
-
-.redBorderImage {
-  border: 1px solid red;
-  width: 150px;
-  height: 150px;
-  margin: 0 15px 10px 0;
-  object-fit: cover;
-  @include mobile {
-    width: 70px;
-    height: 70px;
-  }
-}
-
-.squareImage {
-  width: 110px;
-  height: 110px;
-  margin: 0 15px 10px 0;
-  object-fit: cover;
-  @include mobile {
-    width: 55px;
-    height: 55px;
+    font-size: 9px;
+    padding: 2px 15px;
   }
 }
 
@@ -406,49 +429,47 @@ div {
   bottom: 40px;
   padding: 10px;
   cursor: pointer;
-}
-
-.audioLabel {
-  font-size: 14px;
-  @include mobile {
-    font-size: 12px;
+  .audio-label {
+    font-size: 14px;
+    @include mobile {
+      font-size: 12px;
+    }
   }
-}
-
-.audioIcon {
-  background-image: url("../assets/icons/icon-audio.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  width: 40px;
-  height: 40px;
-  @include mobile {
-    width: 30px;
-    height: 30px;
+  .audio-icon {
+    background-image: url("../assets/icons/icon-audio.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 40px;
+    height: 40px;
+    @include mobile {
+      width: 30px;
+      height: 30px;
+    }
   }
 }
 
 .sep {
   border-left: 2px solid black;
-  height: 100%;
+  margin-top: auto;
+  height: 95%;
   width: 40px;
   position: relative;
-}
-
-.sepCircle {
-  display: flex;
-  position: absolute;
-  top: -12px;
-  left: -8px;
-  div {
-    width: 20px;
-    height: 20px;
-    border-radius: 10px;
-    background-color: black;
-    @include mobile {
-      width: 16px;
-      height: 16px;
-      border-radius: 8px;
+  .sep-circle {
+    display: flex;
+    position: absolute;
+    top: -12px;
+    left: -8px;
+    div {
+      width: 20px;
+      height: 20px;
+      border-radius: 10px;
+      background-color: black;
+      @include mobile {
+        width: 16px;
+        height: 16px;
+        border-radius: 8px;
+      }
     }
   }
 }
@@ -472,56 +493,416 @@ div {
       transform: scale(0.5);
     }
   }
-  #dbsLogo {
+  #dbs-logo {
     background-image: url("../assets/images/moko_logo.png");
     height: 120px;
     width: 200px;
   }
-  #warnerLogo {
+  #warner-logo {
     background-image: url("../assets/images/moko_logo.png");
     height: 120px;
     width: 200px;
   }
-  #mokoLogo {
+  #moko-logo {
     background-image: url("../assets/images/moko_logo.png");
     height: 120px;
     width: 200px;
   }
-  #hkgdaLogo {
+  #hkgda-logo {
     background-image: url("../assets/images/moko_logo.png");
     height: 120px;
     width: 200px;
   }
 }
 
-#content1 {
-  .infoBox {
-    align-self: flex-start;
-    padding-right: 300px;
-    @include mobile {
-      padding-right: 150px;
-    }
-  }
-}
-
-#content3 {
-  .title {
+.light-box {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  z-index: 90;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  .light-box-background {
     position: absolute;
-    left: -240px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(60px);
+    -webkit-backdrop-filter: blur(60px);
     @include mobile {
-      left: -150px;
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+    }
+    // filter: brightness(1.3) saturate(120%);
+    z-index: -1;
+  }
+  .light-box-inner {
+    width: 100%;
+    height: 100%;
+    padding: 50px 100px;
+    @include mobile {
+      padding: 20px 40px;
     }
   }
-  .infoBox {
-    align-self: flex-start;
-    padding-right: 300px;
+  .light-box-close-button {
+    position: absolute;
+    cursor: pointer;
+    font-size: 38px;
+    top: 15px;
+    right: 15px;
     @include mobile {
-      padding-right: 150px;
+      font-size: 25px;
+      top: 8px;
+      right: 8px;
     }
   }
 }
 
-#content5 {
+.feature-story {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .row {
+    flex: 1;
+  }
+  .title {
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  p {
+    margin: 0 0 38px 0;
+    font-size: 17px;
+    max-width: 400px;
+    @include mobile {
+      font-size: 12px;
+      max-width: 200px;
+      margin: 0 0 18px 0;
+    }
+    h1 {
+      margin: 0;
+      font-size: 1.3em;
+    }
+  }
+  .feature-story-image {
+    width: auto;
+    max-width: 55%;
+    height: 200px; 
+    object-fit: contain;
+    object-position: left top;  
+  }
+  .feature-story-content {
+    margin-left: 40px;
+    @include mobile {
+      margin-left: 25px;
+    }
+  }
+}
+
+.audio-player {
+  display: flex;
+  align-items: center;
+  transform: translateX(-6px);
+  @include mobile {
+    transform: translateX(-3px);
+  }
+  .audio-button {
+    width: 55px;
+    height: 55px;
+    font-size: 55px;
+    cursor: pointer;
+    @include mobile {
+      width: 35px;
+      height: 35px;
+      font-size: 35px;
+    }
+    svg {
+      position: absolute;
+    }
+  }
+  .audio-time {
+    font-size: 16px;
+    color: #5c5454;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    margin: 0 11px 0 6px;
+    @include mobile {
+      font-size: 13px;
+      margin: 0 8px 0 4px;
+    }
+  }
+  .audio-track {
+    background-color: #a1a1a1;
+    display: flex;
+    align-items: center;
+    height: 6px;
+    width: 220px;
+    @include mobile {
+      width: 100px;
+      height: 4px;
+    }
+  }
+  .audio-progress {
+    background-color: black;
+    width: 0;
+    height: 11px;
+    @include mobile {
+      height: 8px;
+    }
+  }
+}
+
+#content-1 {
+  .title {
+    font-size: 50px;
+    margin-bottom: 10px;
+    margin-top: 30px;
+    @include mobile {
+      font-size: 28px;
+      margin-bottom: 4px;
+      margin-top: 3vh;
+    }
+  }
+  .info-box {
+    margin-top: -25px;
+    @include mobile {
+      margin-top: -10px;
+    }
+    img {
+      position: absolute;
+      width: auto;
+      @include mobile {
+        height: 100px;
+      }
+      height: 250px;
+      z-index: 100;
+    }
+    p {
+      margin-right: 40px;
+      @include mobile {
+        margin-right: 20px;
+      }
+    }
+  }
+  .video-wrapper {
+    margin-left: 100px;
+    @include mobile {
+      margin-left: 35px;
+    }
+  }
+}
+
+#content-2 {
+  .title {
+    margin-top: 15px;
+    @include mobile {
+      margin-top: 5px;
+    }
+  }
+  .info-box {
+    margin-top: -25px;
+    padding-right: 70px;
+    @include mobile {
+      margin-top: -10px;
+      padding-right: 30px;
+    }
+    p {
+      margin-bottom: 30px;
+      @include mobile {
+        margin-bottom: 3px;
+      }
+    }
+    .feature {
+      min-width: 250px;
+      position: absolute;
+      left: 400px;
+      @include mobile {
+        min-width: 150px;
+        left: 200px;
+      }
+      img {
+        position: absolute;
+        width: auto;
+        @include mobile {
+          height: 100px;
+        }
+        height: 250px;
+        z-index: 100;
+      }
+    }
+  }
+  .video-wrapper {
+    margin-left: 200px;
+    @include mobile {
+      margin-left: 40px;
+    }
+  }
+}
+
+#content-3 {
+  opacity: 1;
+  .title {
+    margin-top: 15px;
+    @include mobile {
+      margin-top: 3px;
+    }
+  }
+  .info-box {
+    margin-left: 25px;
+    @include mobile {
+      margin-left: 15px;
+    }
+    .storyCreditText{
+      font-size: 12px;
+      transform: translateX(-15px);
+      @include mobile {
+        font-size: 7px;
+        transform: translateX(-5px);
+      }
+    }
+    .photo-container-1 .photo {
+      margin-left: auto;
+    }
+    .photo-container-2 {
+      transform: translateY(-50px);
+      @include mobile {
+        transform: translateY(-20px);
+      }
+    }
+    .feature {
+      position: absolute;
+      left: 100px;
+      p {
+        margin: 0;
+      }
+      img {
+        width: auto;
+        @include mobile {
+          height: 80px;
+        }
+        height: 250px;
+        z-index: 100;
+      }
+    }
+  }
+}
+
+#content-4 {
+  .storyCreditText {
+    font-size: 12px;
+    transform: translateY(-8px);
+    @include mobile {
+      transform: translateY(-4px);
+      font-size: 6px;
+    }
+  }
+  .row-2 {
+    margin-left: 80px;
+    @include mobile {
+      margin-left: 40px;
+    }
+  }
+  .info-box {
+    .feature {
+      position: absolute;
+      left: 300px;
+      top: -30px;
+      @include mobile {
+        left: 160px;
+        top: -15px;
+      }
+      img {
+        width: auto;
+        @include mobile {
+          height: 180px;
+        }
+        height: 350px;
+      }
+    }
+  }
+}
+
+#content-dbs {
+  .bg {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 95%;
+    width: auto;
+  }
+  .dbs-feature {
+    position: relative;
+    img {
+      height: 400px;
+      width: auto;
+    }
+    p {
+      color: white;
+    }
+  }
+  .info-box p {
+    width: 650px;
+    margin: 20px 80px;
+    @include mobile {
+      width: 350px;
+      margin: 10px 20px;
+    }
+  }
+  .row {
+    position: relative;
+  }
+  .contact-us {
+    p {
+      font-size: 25px;
+    }
+  }
+}
+
+#content-dbs-album {
+  font-size: 80px;
+  @include mobile {
+    font-size: 37px;
+  }
+  .title {
+    font-size: 25px;
+    margin-top: -15px;
+    @include mobile {
+      font-size: 14px;
+      margin-top: -10px;
+    }
+  }
+  .photos-container {
+    position: relative;
+    margin: 70px 10px 0 10px;
+    @include mobile {
+      margin: 40px 5px 0 5px;
+    }
+  }
+  .dbs-banner {
+    height: 100px;
+    width: auto;
+    @include mobile {
+      height: 50px;
+    }
+  }
+  .photo {
+    object-fit: cover;
+    margin: 15px 10px;
+    @include mobile {
+      margin: 8px 4px;
+    }
+  }
+  .red-gradient {
+    position: absolute;
+    height: 1.5em;
+    background: linear-gradient(to left, #FF2D30FF 0%,  #ED1C2400 100%);
+    &.is-flip{
+      transform: scaleX(-1);
+    }
+  }
+}
+
+#content-5 {
   .heading {
     height: 60px;
     justify-content: center;
@@ -538,7 +919,7 @@ div {
       margin-right: 5px;
     }
   }
-  .infoBox {
+  .info-box {
     position: absolute;
     bottom: 15vh;
     right: 0;
@@ -554,31 +935,72 @@ div {
   }
 }
 
-#content6 {
-  #contactUs {
-    display: flex;
-    justify-content: center;
-    width: 800px;
-    padding-top: 120px;
+#content-dl {
+  padding: 0px 20px;
+  background-image: url('../assets/images/dl_bg.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: white;
+  font-size: 15px;
+  @include mobile {
+    font-size: 10px;
+  }
+  .dl-logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 120px;
+    width: auto;
     @include mobile {
-      padding-top: 80px;
-      width: 500px;
-    }
-    .heading {
-      color: white;
-      font-size: 35px;
-      @include mobile {
-        font-size: 20px;
-      }
-      img {
-        height: 35px;
-        width: auto;
-        margin-left: 10px;
-        margin-bottom: -5px;
-      }
+      height: 80px;
     }
   }
-  .flexFill {
+  .dl-bg {
+    height: 100%;
+    width: auto;
+  }
+  .column {
+    position: relative;
+    justify-content: center;
+    margin: 0 80px;
+    @include mobile {
+      margin: 0 40px;
+    }
+  }
+  h1 {
+    font-weight: 300;
+  }
+  p {
+    line-height: 1.2;
+  }
+  .paragraph {
+    width: 400px;
+    @include mobile {
+      width: 300px;
+    }
+  }
+  .download {
+    background-image: url('../assets/images/dl_bg_small.png');
+    background-size: auto 100%;
+    background-repeat: repeat-x;
+    position: absolute;
+    bottom: 0;
+    padding: 130px 400px 30px 300px;
+    @include mobile {
+      padding: 20px 300px 15px 150px;
+    }
+    & > .row {
+      margin-bottom: 20px;
+    }
+  }
+}
+
+#content-org {
+  padding-left: 0 200px 0 150px;
+  @include mobile {
+    padding-left: 0 150px 0 70px;
+  }
+  .flex-fill {
     top: 0;
     left: 0;
     position: absolute;
@@ -590,7 +1012,7 @@ div {
     justify-content: center;
     padding: 20px 0;
   }
-  .appInfo {
+  .app-info {
     position: relative;
     height: 85.17%;
     img {
@@ -598,36 +1020,9 @@ div {
       height: 100%;
       width: auto;
     }
-    .icon {
-      width: 25px;
-      height: 25px;
-      margin-right: 10px;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      @include mobile {
-        width: 12px;
-        height: 12px;
-        margin-right: 4px;
-      }
-    }
-    #instagramIcon {
-      background-image: url("../assets/icons/icon-instagram.png");
-    }
-    #facebookIcon {
-      background-image: url("../assets/icons/icon-facebook.png");
-    }
     .row {
       align-items: center;
       margin: 5px 0;
-    }
-    a {
-      color: white;
-      text-decoration: unset;
-      font-size: 20px;
-      @include mobile {
-        font-size: 10px;
-      }
     }
     p {
       color: white;
@@ -635,24 +1030,6 @@ div {
       @include mobile {
         font-size: 14px;
       }
-    }
-    .downloadButton {
-      margin: 0 2px;
-      width: 150px;
-      height: 44px;
-      @include mobile {
-        width: 70px;
-        height: 21px;
-      }
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-    #downloadIos {
-      background-image: url("../assets/images/download_android.png");
-    }
-    #downloadAndroid {
-      background-image: url("../assets/images/download_ios.png");
     }
   }
   .mountain {
@@ -667,12 +1044,67 @@ div {
     color: white;
     font-size: 14px;
   }
-}
-
-#content7 {
-  .orgWrapper {
+  .org-wrapper {
     height: 85.17%;
     display: flex;
     align-items: center;
+  }
+}
+
+
+
+.download {
+  font-size: 25px;
+  @include mobile {
+    font-size: 14px;
+  }
+  font-family: 'Noto Sans TC', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .download-button {
+    margin: 0 2px;
+    width: 150px;
+    height: 44px;
+    @include mobile {
+      width: 80px;
+      height: 24px;
+    }
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  .download-ios {
+    background-image: url("../assets/images/download_android.png");
+  }
+  .download-android {
+    background-image: url("../assets/images/download_ios.png");
+  }
+  .icon {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    @include mobile {
+      width: 12px;
+      height: 12px;
+      margin-right: 4px;
+    }
+  }
+  .instagram-icon {
+    background-image: url("../assets/icons/icon-instagram.png");
+  }
+  .facebook-icon {
+    background-image: url("../assets/icons/icon-facebook.png");
+  }
+  a {
+    color: white;
+    text-decoration: unset;
+    font-size: 20px;
+    @include mobile {
+      font-size: 10px;
+    }
   }
 }

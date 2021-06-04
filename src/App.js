@@ -4,7 +4,7 @@ import store from './store';
 
 import Cover from '@/pages/Cover';
 import Gallery from '@/pages/Gallery';
-import LinesCanvas from '@/pages/LinesCanvas';
+import LightBox from '@/pages/LightBox';
 
 import '@/styles/styles.css';
 
@@ -13,11 +13,13 @@ function App() {
   const [isLandscape, setIsLandscape] = useState(false);
   const [canScroll, setCanScroll] = useState(false);
 
+  window.addEventListener('DOMContentLoaded', (event) => {
+    console.log('DOM fully loaded and parsed');
+  });
+
   useEffect(() => {
     setTimeout(
-      () => {
-        setIsLandscape(window.innerWidth > window.innerHeight);
-      }
+      () => setIsLandscape(window.innerWidth > window.innerHeight)
     , 500)
   }, []); 
 
@@ -40,8 +42,9 @@ function App() {
 
   return (
     <Provider store={store}>
-      <div className={isLandscape ? 'isLandscape' : ''} style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
+      <div className={isLandscape ? 'is-landscape' : ''} style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
         <Gallery canScroll={canScroll}/>
+        {/* <LightBox/> */}
         <Cover/>
       </div>
     </Provider>
