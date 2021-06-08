@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16.615" height="51.113" viewBox="0 0 16.615 51.113">
+  <g id="Group_1538" data-name="Group 1538" transform="translate(-179.035 -222.298)">
+    <g id="Icon_feather-rotate-cw" data-name="Icon feather-rotate-cw" transform="translate(179.742 259.094)">
+      <path id="Path_73" data-name="Path 73" d="M25.5,6v4.6h4.6" transform="translate(-25.5 -5.234)" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    </g>
+    <g id="Group_1536" data-name="Group 1536">
+      <path id="Path_74" data-name="Path 74" d="M6.431,13.709A6.906,6.906,0,1,0,8.058,6.527L4.5,9.873" transform="translate(175.237 254.591)" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <path id="Icon_ionic-ios-phone-portrait" data-name="Icon ionic-ios-phone-portrait" d="M23.262,2.25H12.393A2.255,2.255,0,0,0,10.125,4.5v26.11a2.322,2.322,0,0,0,2.268,2.337H23.255a2.276,2.276,0,0,0,2.214-2.337V4.5A2.2,2.2,0,0,0,23.262,2.25Zm-6.49,1.576h2.056a.274.274,0,0,1,0,.548H16.772a.274.274,0,1,1,0-.548Zm1.062,28.1a1.192,1.192,0,1,1,1.192-1.192A1.193,1.193,0,0,1,17.835,31.924Zm6.408-3.358H11.359a.137.137,0,0,1-.137-.137V5.882a.137.137,0,0,1,.137-.137H24.242a.137.137,0,0,1,.137.137V28.429A.137.137,0,0,1,24.242,28.566Z" transform="translate(169.789 220.048)"/>
+    </g>
+  </g>
+</svg>

@@ -1,17 +1,13 @@
 import React from 'react';
 
-const Audio = () => {
-  return (
-    <div className='audio'>
-      <div className='audio-label'>聲音導航</div>
-      <div className='audio-icon'/>
-    </div>
-  )
-}
-
 const LearnMore = () => {
+
+  const scrollToTarget = () => {
+    document.getElementById('content-dl').scrollIntoView();
+  }
+
   return (
-    <div className='learn-more'>
+    <div className='learn-more' onClick={scrollToTarget}>
       learn more
     </div>
   )
@@ -19,23 +15,20 @@ const LearnMore = () => {
 
 export default function InfoBox(props) {
 
-  const { children, style, audio, learnMore, parallax, offset } = props;
+  const { children, style, learnMore } = props;
 
   return (
     <div 
-      className={`info-box${parallax ? ' parallax-element' : ''}`} 
+      className='info-box parallax-element'
       style={{
         ...style,
-        '--offset': offset
+        // '--offset': offset
       }}
     >
       {children}
       {learnMore &&
         <LearnMore/>
       }
-      {/* {audio &&
-        <Audio/>
-      } */}
     </div>
   );
 }

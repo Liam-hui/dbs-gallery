@@ -1,6 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700&display=swap');
-
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap');
 
 @font-face {
   font-family: "Avenir";
@@ -16,6 +15,12 @@
   }
 }
 
+@mixin landscape {
+  @media (orientation: landscape) {
+    @content;
+  }
+}
+
 // @mixin tablet {
 //   @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
 //     @content;
@@ -27,7 +32,6 @@
 //     @content;
 //   }
 // }
-
 
 html, body, #root {
   margin: 0;
@@ -50,21 +54,17 @@ div {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+  position: relative;
 }
 
 .column {
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
-.vertical-margin {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-.horizontal-margin {
-  margin-right: 20px;
-  margin-left: 20px;
+.isClick {
+  cursor: pointer;
 }
 
 #cover {
@@ -82,7 +82,31 @@ div {
   font-size: 22px;
   opacity: 1;
   z-index: 99;
-  transition: opacity 0.5s ease-in-out ;
+  transition: opacity 0.5s ease-in-out;
+  #rotate {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    top: 25%;
+    @include mobile {
+      font-size: 11px;
+    }
+    @include landscape() {
+      display: none;
+    }
+    img {
+      width: 40px;
+      height: auto;
+      margin-bottom: 5px;
+      @include mobile {
+        height: auto;
+        width: 18px;
+      }
+    }
+  }
 }
 .is-landscape #cover {
   opacity: 0;
@@ -92,7 +116,8 @@ div {
 
 #intro {
   position: relative;
-  width: 60vw;
+  flex-shrink: 0;
+  width: 1000px;
   height: 100%;
   z-index: 1;
   padding-left: 220px;
@@ -102,17 +127,17 @@ div {
   }
   p {
     position: absolute;
-    top: 30%;
-    left: 28%;
+    top: 35%;
+    right: 15px;
     opacity: 0;
     transition: opacity 0.5s ease-in-out 2.5s;
-    font-size: 24px;
+    font-size: 22px;
     @include mobile {
-      top: 28%;
-      font-size: 12px;
+      right: 5px;
+      font-size: 10px;
     }
     h1 {
-      font-size: 1.6em;
+      font-size: 1.8em;
       margin-top: 20px;
       @include mobile {
         margin-top: 15px;
@@ -121,19 +146,36 @@ div {
   }
   .rays {
     position: absolute;
-    bottom: -70px;
-    right: -70px;
-    width: 150px;
+    bottom: -140px;
+    right: 120px;
+    width: 180px;
     height: auto;
     @include mobile {
       width: 80px;
-      bottom: -40px;
-      right: -40px;
+      bottom: -60px;
+      right: 60px;
+    }
+  }
+  .human {
+    opacity: 0;
+    position: absolute;
+    bottom: 5vh;
+    left: 30%;
+    height: 300px;
+    width: auto;
+    transition: opacity 0.5s ease-in-out 2s;
+    @include mobile {
+      height: 150px;
     }
   }
 }
-.is-landscape #intro p {
-  opacity: 1;
+.is-landscape #intro {
+  p {
+    opacity: 1;
+  }
+  .human {
+    opacity: 1;
+  }
 }
 
 #banner {
@@ -142,7 +184,6 @@ div {
   top: 30vh;
   left: 0;
   width: 100vw;
-  transition: all 0.7s ease-in-out 2s;
   img {
     width: 80%;
     height: auto;
@@ -151,24 +192,25 @@ div {
 .is-landscape #banner {
   width: 100%;
   top: 10%;
+  transition: all 0.7s ease-in-out 2s;
 }
 
 #gallery-container {
   position: relative;
   height: 100%;
+  width: 100%;
   overflow-y: hidden;
+  background-image: url("../assets/images/bg-tile.jpg");
+  background-size: auto 100%;
+  background-repeat: repeat-x;
 }
 
 #scroll-content {
   position: relative;
   height: 100%;
   display: inline-flex;
-  background-image: url("../assets/images/bg_tile.png");
-  background-size: auto 100%;
-  background-repeat: repeat-x;
-  // padding-right: 30vw;
-  min-width: 12000px;
   transition: padding-right 0.5s ease-in-out;
+  // overflow-y: hidden;
   #bg-start {
     height: 100%;
     position: absolute;
@@ -180,11 +222,9 @@ div {
     }
   }
 }
-.is-opened #scroll-content {
-  min-width: unset;
-}
 
 .content-container {
+  flex-shrink: 0;
   position: relative;
   height: 100%;
   pointer-events: none;
@@ -195,6 +235,16 @@ div {
   @include mobile {
     padding: 8px 10px 0 10px;
   }
+  .title {
+    position: relative;
+    img {
+      height: 120px;
+      width: auto; 
+      @include mobile {
+        height: 50px;
+      }
+    }
+  }
 }
 .is-opened .content-container {
   pointer-events: unset;
@@ -203,106 +253,148 @@ div {
 
 .parallax-element {
   opacity: 0;
+  pointer-events: none;
   &.animated {
     opacity: 1;
+    pointer-events: unset;
   }
   transition: opacity 0.5s ease-in;
   -webkit-transition: opacity 0.5s ease-in;
 }
 
-.feature-image-wrapper {
+.artist-photo-wrapper {
+  flex-shrink: 0;
   position: relative;
-  width: 160px;
-  height: 400px;
   margin-top: 10vh;
   opacity: 0;
   @include mobile {
-    width: 90px;
-    height: 225px;
+    margin-top: 10vh;
   }
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: object-position 0.5s ease-in-out;
   }
-  & > div {
-    width: 100%;
-    height: 100%;
+  .artist-photo {
+    width: 160px;
+    height: 400px;
+    @include mobile {
+      width: 80px;
+      height: 200px;
+    }
     box-shadow: 0px 3px 15px 2px rgba(0,0,0,0.25);
-    transition: transform 0.5s ease-in-out;
+    transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 1s ease-in-out;
   }
-  &#feature-image-1 {
-    transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out 2.4s;
-    img {
-      object-position: 42% 0%;
+  .photo-credit-text {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+  .artist-name {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+  &#artist-photo-1 {
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out 2.4s;
+    width: 400px;
+    height: 430px;
+    @include mobile {
+      width: 176px;
+      height: 190px;
+    }
+    .artist-photo img {
+      object-position: 43% 0%;
+    }
+    .artist-name {
+      float: right;
     }
   }
-  &#feature-image-2 {
-    transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out 2.6s;
-    & > div {
-      transform: translateY(35px);
-      @include mobile {
-        transform: translateY(20px);
-      }
+  &#artist-photo-2 {
+    width: 400px;
+    height: 464px;
+    @include mobile {
+      width: 173px;
+      height: 200px;
     }
-    img {
-      object-position: 48% 50%;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out 2.6s;
+    transform: translateY(35px);
+    @include mobile {
+      transform: translateY(20px);
     }
   }
-  &#feature-image-3 {
-    transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out 2.8s;
+  &#artist-photo-3 {
+    width: 400px;
+    height: 500px;
+    @include mobile {
+      width: 160px;
+      height: 200px;
+    }
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out 2.8s;
   }
-  &#feature-image-4 {
-    transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out 3s;
-    & > div {
-      transform: translateY(35px);
-      @include mobile {
-        transform: translateY(20px);
-      }
+  &#artist-photo-4 {
+    width: 400px;
+    height: 493px;
+    @include mobile {
+      width: 163px;
+      height: 200px;
+    }
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out 3s;
+    transform: translateY(35px);
+    @include mobile {
+      transform: translateY(20px);
     }
   }
 }
-.is-landscape .feature-image-wrapper {
+.is-landscape .artist-photo-wrapper {
   opacity: 1;
 }
-.is-opened .feature-image-wrapper {
+.is-opened .artist-photo-wrapper {
   transform: unset !important;
-  width: 450px;
-  height: 360px;
-  @include mobile {
-    width: 250px;
-    height: 200px;
-  }
-  & > div {
+  .artist-photo {
+    width: 100%;
+    height: 100%;
     transform: unset !important;
+    img {
+      object-position: 50% 50% !important;
+    }
+  }
+  .photo-credit-text {
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out 0.6s;
+  }
+  .artist-name {
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out 0.6s;
   }
 }
-.is-opened #feature-image-1 {
-  width: 360px;
-  height: 430px;
-  @include mobile {
-    width: 176px;
-    height: 210px;
+.is-opened #artist-photo-2 {
+  .artist-name {
+    position: absolute;
+    top: -45px;
+    @include mobile {
+      top: -25px;
+    }
   }
 }
-// .is-opened #feature-image-2 {
-//   width: 370px;
-//   height: 430px;
-//   @include mobile {
-//     width: 181px;
-//     height: 210px;
-//   }
-// }
-// .is-opened #feature-image-3 {
-//   transform: translateY(50px);
-//   width: 240px;
-//   height: 430px;
-//   @include mobile {
-//     transform: translateY(10px);
-//     width: 168px;
-//     height: 230px;
-//   }
-// }
+.is-opened #artist-photo-3 {
+  .artist-name {
+    margin-top: 20px;
+    float: right;
+    @include mobile {
+      margin-top: 0px;
+    }
+  }
+}
+.is-opened #artist-photo-4 {
+  .artist-name {
+    position: absolute;
+    top: -45px;
+    left: 0;
+    @include mobile {
+      top: -25px;
+    }
+  }
+}
 
 .lines-source {
   position: relative;
@@ -337,18 +429,7 @@ div {
   }
 }
 
-.title {
-  position: relative;
-  font-size: 38px;
-  line-height: 1.25;
-  margin-bottom: 8px;
-  @include mobile {
-    font-size: 20px;
-    margin-bottom: 3px;
-  }
-}
-
-.storyCreditText {
+.story-credit-text {
   font-weight: 600;
   font-size: 14px;
   margin-bottom: 8px;
@@ -358,7 +439,7 @@ div {
   }
 }
 
-.photoCreditText {
+.photo-credit-text {
   color: #707070;
   font-family: "Helvetica Neue", Arial, sans-serif;
   font-size: 12px;
@@ -367,22 +448,37 @@ div {
   }
 }
 
+.artist-name {
+  color: black;
+  font-size: 22px;
+  font-weight: bold;
+  display: inline-block;
+  @include mobile {
+    font-size: 12px;
+  }
+}
+
 .photo {
   display: block;
   width: auto;
-  height: 110px;
+  height: 120px;
   margin: 0 15px 10px 0;
+  cursor: pointer;
   @include mobile {
-    height: 58px;
+    height: 50px;
     margin: 0 5px 5px 0;
   }
-  &.isHorizontal {
-    width: 110px;
+  &.is-horizontal {
+    width: 120px;
     height: auto;
     @include mobile {
-      width: 58px;
+      width: 50px;
     }
   }
+}
+
+.human {
+  pointer-events: none;
 }
 
 .info-box {
@@ -393,7 +489,7 @@ div {
   // filter: brightness(1.5) saturate(140%);
   padding: 15px 20px;
   @include mobile {
-    padding: 5px 15px;
+    padding: 0px 12px;
   }
   p {
     font-size: 18px;
@@ -401,7 +497,7 @@ div {
     margin: 8px 0;
     @include mobile {
       margin: 4px 0;
-      font-size: 9px;
+      font-size: 8px;
     }
   }
 }
@@ -420,102 +516,47 @@ div {
   }
 }
 
-.audio {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  right: 0;
-  bottom: 40px;
-  padding: 10px;
-  cursor: pointer;
-  .audio-label {
-    font-size: 14px;
-    @include mobile {
-      font-size: 12px;
-    }
-  }
-  .audio-icon {
-    background-image: url("../assets/icons/icon-audio.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 40px;
-    height: 40px;
-    @include mobile {
-      width: 30px;
-      height: 30px;
-    }
-  }
-}
-
-.sep {
-  border-left: 2px solid black;
-  margin-top: auto;
-  height: 95%;
+.sep-wrapper {
+  height: 100%;
   width: 40px;
-  position: relative;
-  .sep-circle {
-    display: flex;
+  .sep {
+    border-left: 2px solid black;
     position: absolute;
-    top: -12px;
-    left: -8px;
-    div {
-      width: 20px;
-      height: 20px;
-      border-radius: 10px;
-      background-color: black;
-      @include mobile {
-        width: 16px;
-        height: 16px;
-        border-radius: 8px;
+    width: 40px;
+    height: 100%;
+    bottom: 0;
+    .sep-circle {
+      display: flex;
+      position: absolute;
+      top: -12px;
+      left: -8px;
+      div {
+        width: 20px;
+        height: 20px;
+        border-radius: 10px;
+        background-color: black;
+        @include mobile {
+          width: 16px;
+          height: 16px;
+          border-radius: 8px;
+        }
+      }
+    }
+  }
+  &.white {
+    .sep {
+      border-left: 2px solid white;
+    }
+    .sep-circle {
+      div {
+        background-color: white;
       }
     }
   }
 }
 
-.org {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 250px;
-  --offset: -300;
-  @include mobile {
-    width: 200px;
-    --offset: -250;
-  }
-  .logo {
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    @include mobile {
-      // width: 200px;
-      transform: scale(0.5);
-    }
-  }
-  #dbs-logo {
-    background-image: url("../assets/images/moko_logo.png");
-    height: 120px;
-    width: 200px;
-  }
-  #warner-logo {
-    background-image: url("../assets/images/moko_logo.png");
-    height: 120px;
-    width: 200px;
-  }
-  #moko-logo {
-    background-image: url("../assets/images/moko_logo.png");
-    height: 120px;
-    width: 200px;
-  }
-  #hkgda-logo {
-    background-image: url("../assets/images/moko_logo.png");
-    height: 120px;
-    width: 200px;
-  }
-}
-
 .light-box {
+  white-space: pre-line;
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -523,6 +564,26 @@ div {
   top: 0;
   height: 100%;
   width: 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out, background-color 0s ease-in-out;
+  background-color: #EEEEEE;
+  &.is-visible {
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out, background-color 0.8s ease-in-out 0.7s;
+    background-color: transparent;
+    .light-box-background {
+      transition: opacity 0.8s ease-in-out 0.3s;
+      opacity: 1;
+    }
+  }
+  .title {
+    font-weight: 500;
+    font-size: 35px;
+    line-height: 1.4;
+    @include mobile {
+      font-size: 19px;
+    }
+  }
   .light-box-background {
     position: absolute;
     width: 100%;
@@ -530,6 +591,8 @@ div {
     background-color: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(60px);
     -webkit-backdrop-filter: blur(60px);
+    opacity: 0;
+    transition: unset;
     @include mobile {
       backdrop-filter: blur(40px);
       -webkit-backdrop-filter: blur(40px);
@@ -559,25 +622,33 @@ div {
   }
 }
 
-.feature-story {
+.story {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
+  // align-items: center;
   .row {
     flex: 1;
   }
   .title {
     font-weight: 600;
-    line-height: 1.5;
+    display: flex;
+    align-items: flex-end;
+    height: 100px;
+    margin-bottom: 30px;
+    @include mobile {
+      margin-bottom: 10px;
+      height: 50px;
+    }
   }
   p {
     margin: 0 0 38px 0;
     font-size: 17px;
     max-width: 400px;
     @include mobile {
-      font-size: 12px;
-      max-width: 200px;
+      font-size: 10px;
+      max-width: 220px;
       margin: 0 0 18px 0;
     }
     h1 {
@@ -585,17 +656,75 @@ div {
       font-size: 1.3em;
     }
   }
-  .feature-story-image {
-    width: auto;
-    max-width: 55%;
-    height: 200px; 
+  .story-image {
+    height: 100%;
+    width: 40%; 
     object-fit: contain;
-    object-position: left top;  
+    object-position: right center;  
   }
-  .feature-story-content {
+  .story-content {
     margin-left: 40px;
+    margin-top: 300px;
+    padding-right: 300px;
     @include mobile {
+      margin-top: 80px;
       margin-left: 25px;
+      padding-right: 100px;
+    }
+  }
+  &.full {
+    .story-image {
+      width: auto;
+      max-width: 55%; 
+      object-position: left top;  
+    }
+    .story-content {
+      margin-top: 0;
+    }
+  }
+  .label {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 14px;
+    margin-top: 60px;
+    margin-bottom: 10px;
+    @include mobile {
+      font-size: 10px;
+      margin-top: 10px;
+      margin-bottom: 5px;
+    }
+  }
+  .sight-logo {
+    height: 60px;
+    width: auto;
+    @include mobile {
+      height: 25px;
+    }
+  }
+  .audio-icon {
+    height: 26px;
+    margin-left: 10px;
+    width: auto;
+    @include mobile {
+      height: 18px;
+      margin-left: 5px;
+    }
+  }
+  .arrow-icon {
+    position: absolute;
+    top: 50%;
+    height: 40px;
+    width: auto;
+    cursor: pointer;
+    @include mobile {
+      height: 20px;
+    }
+    &.arrow-icon-left {
+      left: 20px;
+      transform: translateY(-50%) scaleX(-1);
+    }
+    &.arrow-icon-right {
+      right: 20px;
+      transform: translateY(-50%);
     }
   }
 }
@@ -607,15 +736,15 @@ div {
   @include mobile {
     transform: translateX(-3px);
   }
-  .audio-button {
+  .play-button {
     width: 55px;
     height: 55px;
     font-size: 55px;
     cursor: pointer;
     @include mobile {
-      width: 35px;
-      height: 35px;
-      font-size: 35px;
+      width: 24px;
+      height: 24px;
+      font-size: 24px;
     }
     svg {
       position: absolute;
@@ -627,7 +756,7 @@ div {
     font-family: "Helvetica Neue", Arial, sans-serif;
     margin: 0 11px 0 6px;
     @include mobile {
-      font-size: 13px;
+      font-size: 10px;
       margin: 0 8px 0 4px;
     }
   }
@@ -652,15 +781,48 @@ div {
   }
 }
 
+.audio-button-container {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  align-items: center;
+  font-size: 16px;
+  padding: 8px;
+  cursor: pointer;
+  @include mobile {
+    font-size: 9px;
+    padding: 5px;
+  }
+  .audio-button-label {
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+  .audio-button-icon {
+    height: 35px;
+    margin-top: 5px;
+    width: auto;
+    @include mobile {
+      height: 15px;
+      margin-top: 2px;
+    }
+  }
+}
+
 #content-1 {
   .title {
-    font-size: 50px;
-    margin-bottom: 10px;
     margin-top: 30px;
     @include mobile {
-      font-size: 28px;
-      margin-bottom: 4px;
       margin-top: 3vh;
+    }
+    img {
+      @include mobile {
+        height: 35px;
+      }
+    }
+  }
+  .story-credit-text{
+    margin-top: -12spx;
+    @include mobile {
+      margin-top: -8px;
     }
   }
   .info-box {
@@ -677,39 +839,62 @@ div {
       height: 250px;
       z-index: 100;
     }
-    p {
+    .row > p {
       margin-right: 40px;
+      margin-bottom: 50px;
       @include mobile {
         margin-right: 20px;
+        margin-bottom: 5px;
       }
     }
   }
   .video-wrapper {
-    margin-left: 100px;
+    margin-left: 5px;
     @include mobile {
-      margin-left: 35px;
+      margin-left: -50px;
     }
   }
 }
 
 #content-2 {
   .title {
+    z-index: 99;
     margin-top: 15px;
     @include mobile {
       margin-top: 5px;
     }
+    img {
+      @include mobile {
+        height: 38px;
+      }
+    }
   }
-  .info-box {
-    margin-top: -25px;
-    padding-right: 70px;
+  .column > div:nth-child(2) {
+    margin-left: 50px;
+    @include mobile {
+      margin-left: 10px;
+    }
+  };
+  .story-credit-text {
+    position: relative;
+    z-index: 99;
     @include mobile {
       margin-top: -10px;
-      padding-right: 30px;
     }
-    p {
-      margin-bottom: 30px;
+  }
+  .info-box {
+    margin-top: -115px;
+    padding: 110px 70px 30px 40px;
+    @include mobile {
+      margin-top: -80px;
+      padding: 80px 30px 10px 20px;
+    }
+    .row > p {
+      margin-right: 40px;
+      margin-bottom: 50px;
       @include mobile {
-        margin-bottom: 3px;
+        margin-right: 20px;
+        margin-bottom: 5px;
       }
     }
     .feature {
@@ -719,6 +904,7 @@ div {
       @include mobile {
         min-width: 150px;
         left: 200px;
+        top: -15px;
       }
       img {
         position: absolute;
@@ -732,32 +918,60 @@ div {
     }
   }
   .video-wrapper {
-    margin-left: 200px;
+    margin-left: 30px;
     @include mobile {
-      margin-left: 40px;
+      margin-left: 20px;
     }
   }
 }
 
 #content-3 {
-  opacity: 1;
   .title {
     margin-top: 15px;
+    margin-left: 60px;
     @include mobile {
       margin-top: 3px;
+      margin-left: 35px;
+    }
+    img {
+      height: 98px;
+      @include mobile {
+        height: 40px;
+      }
+    }
+  }
+  .human {
+    opacity: 0.5;
+    position: absolute;
+    bottom: 3vh;
+    left: 5%;
+    height: 300px;
+    width: auto;
+    @include mobile {
+      height: 130px;
     }
   }
   .info-box {
     margin-left: 25px;
+    margin-top: 20px;
     @include mobile {
       margin-left: 15px;
+      margin-top: 8px;
     }
-    .storyCreditText{
+    .story-credit-text{
       font-size: 12px;
       transform: translateX(-15px);
       @include mobile {
         font-size: 7px;
         transform: translateX(-5px);
+      }
+    }
+    .photo-container{
+      margin-left: 100px;
+      transform: translateY(-60px);
+      @include mobile {
+        margin-left: 60px;
+        transform: translateY(-30px);
       }
     }
     .photo-container-1 .photo {
@@ -769,13 +983,29 @@ div {
         transform: translateY(-20px);
       }
     }
+    .audio-button-container {
+      margin-top: auto;
+      margin-bottom: 80px;
+      margin-left: -40px;
+      margin-right: 40px;
+      @include mobile {
+        margin-bottom: 40px;
+        margin-left: -20px;
+        margin-right: 10px;
+      }
+    }
     .feature {
       position: absolute;
-      left: 100px;
+      left: 300px;
+      bottom: -200px;
+      @include mobile {
+        left: 150px;
+        bottom: -35px;
+      }
       p {
         margin: 0;
       }
-      img {
+      .feature-photo {
         width: auto;
         @include mobile {
           height: 80px;
@@ -783,12 +1013,22 @@ div {
         height: 250px;
         z-index: 100;
       }
+      .audio-button-container { 
+        margin: unset;
+      }
     }
   }
 }
 
 #content-4 {
-  .storyCreditText {
+  .title {
+    img {
+      @include mobile {
+        height: 50px;
+      }
+    }
+  }
+  .story-credit-text {
     font-size: 12px;
     transform: translateY(-8px);
     @include mobile {
@@ -803,156 +1043,55 @@ div {
     }
   }
   .info-box {
+    padding-bottom: 40px;
+    @include mobile {
+      padding-bottom: 15px;
+    }
     .feature {
-      position: absolute;
-      left: 300px;
-      top: -30px;
+      margin-top: -30px;
+      height: 10px;
       @include mobile {
-        left: 160px;
-        top: -15px;
+        margin-top: -15px;
       }
       img {
         width: auto;
         @include mobile {
-          height: 180px;
+          height: 140px;
         }
         height: 350px;
       }
     }
-  }
-}
-
-#content-dbs {
-  .bg {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 95%;
-    width: auto;
-  }
-  .dbs-feature {
-    position: relative;
-    img {
-      height: 400px;
-      width: auto;
+    .audio-button-container {
+      margin-top: auto;
     }
-    p {
-      color: white;
-    }
-  }
-  .info-box p {
-    width: 650px;
-    margin: 20px 80px;
-    @include mobile {
-      width: 350px;
-      margin: 10px 20px;
-    }
-  }
-  .row {
-    position: relative;
-  }
-  .contact-us {
-    p {
-      font-size: 25px;
-    }
-  }
-}
-
-#content-dbs-album {
-  font-size: 80px;
-  @include mobile {
-    font-size: 37px;
-  }
-  .title {
-    font-size: 25px;
-    margin-top: -15px;
-    @include mobile {
-      font-size: 14px;
-      margin-top: -10px;
-    }
-  }
-  .photos-container {
-    position: relative;
-    margin: 70px 10px 0 10px;
-    @include mobile {
-      margin: 40px 5px 0 5px;
-    }
-  }
-  .dbs-banner {
-    height: 100px;
-    width: auto;
-    @include mobile {
-      height: 50px;
-    }
-  }
-  .photo {
-    object-fit: cover;
-    margin: 15px 10px;
-    @include mobile {
-      margin: 8px 4px;
-    }
-  }
-  .red-gradient {
-    position: absolute;
-    height: 1.5em;
-    background: linear-gradient(to left, #FF2D30FF 0%,  #ED1C2400 100%);
-    &.is-flip{
-      transform: scaleX(-1);
-    }
-  }
-}
-
-#content-5 {
-  .heading {
-    height: 60px;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-size: 40px;
-    @include mobile {
-      height: 20px;
-      font-size: 20px;
-    }
-    img {
-      height: 100%;
-      width: auto;
-      margin-right: 5px;
-    }
-  }
-  .info-box {
-    position: absolute;
-    bottom: 15vh;
-    right: 0;
-    padding-right: 80px;
-    padding-bottom: 100px;
-    @include mobile {
-      padding-right: 80px;
-      padding-bottom: 50px;
-    }
-  }
-  .title {
-    height: 60px;
   }
 }
 
 #content-dl {
   padding: 0px 20px;
-  background-image: url('../assets/images/dl_bg.png');
+  background-image: url('../assets/images/dl-bg.png');
   background-repeat: no-repeat;
   background-size: cover;
   color: white;
   font-size: 15px;
   @include mobile {
-    font-size: 10px;
+    font-size: 9px;
+  }
+  .sep-outer {
+    position: absolute;
+    height: 70%;
+    bottom: 0;
+    z-index: 99;
+    left: 80px;
+    @include mobile {
+      left: 50px;
+    }
   }
   .dl-logo {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 120px;
+    height: 80px;
     width: auto;
     @include mobile {
-      height: 80px;
+      height: 50px;
     }
   }
   .dl-bg {
@@ -971,7 +1110,10 @@ div {
     font-weight: 300;
   }
   p {
-    line-height: 1.2;
+    line-height: 1.5;
+    @include mobile {
+      line-height: 1.1;
+    }
   }
   .paragraph {
     width: 400px;
@@ -979,18 +1121,180 @@ div {
       width: 300px;
     }
   }
-  .download {
-    background-image: url('../assets/images/dl_bg_small.png');
-    background-size: auto 100%;
-    background-repeat: repeat-x;
-    position: absolute;
-    bottom: 0;
-    padding: 130px 400px 30px 300px;
-    @include mobile {
-      padding: 20px 300px 15px 150px;
+  .moment-of-purpose {
+    img {
+      width: 600px;
+      height: auto;
+      transform: translateX(50px);
+      margin-bottom: 40px;
+      @include mobile {
+        width: 270px;
+        margin-bottom: 20px;
+        transform: translateX(50px);
+      }
     }
-    & > .row {
-      margin-bottom: 20px;
+    font-size: 18px;
+    @include mobile {
+      font-size: 10px;
+    }
+    h1 {
+      margin: 1.3em 0 0.5em 0;
+      font-weight: bold;
+    }
+    h5 {
+      margin: 0;
+      font-weight: 400;
+      font-size: 1.3em;
+    }
+  }
+}
+
+#content-dbs {
+  padding-left: 180px;
+  padding-right: 400px;
+  padding-top: 70px;
+  @include mobile {
+    padding-top: 30px;
+    padding-left: 110px;
+    padding-right: 180px;
+  }
+  .title img{
+    height: 100px;
+    @include mobile {
+      height: 40px;
+    }
+  }
+  .bg {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 95%;
+    width: auto;
+  }
+  .dbs-feature {
+    position: relative;
+    margin-right: 55px;
+    @include mobile {
+      margin-right: 30px;
+    }
+    img {
+      height: 360px;
+      width: auto;
+      @include mobile {
+        height: 180px;
+      }
+    }
+    p {
+      color: white;
+      font-size: 24px;
+      margin: 12px 0;
+      @include mobile {
+        font-size: 14px;
+        margin: 6px 0;
+      }
+    }
+  }
+  .info-box {
+    margin-top: 60px;
+    transform: translateX(-80px);
+    padding: 15px 80px;
+    @include mobile {
+      margin-top: 15px;
+      transform: translateX(-50px);
+      padding: 10px 50px;
+    }
+    p {
+      width: 550px;
+      @include mobile {
+        width: 280px;
+      }
+    }
+  }
+  .row {
+    position: relative;
+  }
+  .contact-us {
+    p {
+      font-size: 25px;
+      @include mobile {
+        font-size: 12px;
+      }
+    }
+  }
+  .human {
+    opacity: 0.5;
+    position: absolute;
+    bottom: 10vh;
+    right: 8%;
+    height: 300px;
+    width: auto;
+    @include mobile {
+      height: 130px;
+    }
+  }
+}
+
+#content-dbs-album {
+  font-size: 80px;
+  @include mobile {
+    font-size: 30px;
+  }
+  .title {
+    line-height: 1.7;
+    color: white;
+    font-size: 20px;
+    margin-top: -15px;
+    @include mobile {
+      font-size: 8px;
+      margin-top: -10px;
+    }
+    h1 {
+      color: black;
+      margin: 0;
+      margin-left: -18px;
+      font-weight: 600;
+      font-size: 30px;
+      @include mobile {
+        font-size: 14px;
+        margin-left: -8px;
+      }
+    }
+    a {
+      text-decoration: unset;
+    }
+  }
+  .photos-container {
+    position: relative;
+  }
+  .dbs-banner {
+    position: relative;
+    height: 100px;
+    width: auto;
+    @include mobile {
+      height: 50px;
+    }
+  }
+  .photo {
+    cursor: unset;
+    height: auto;
+    width: auto;
+    margin: 15px 10px;
+    @include mobile {
+      margin: 8px 4px;
+    }
+  }
+  .red-gradient {
+    position: absolute;
+    height: 1.5em;
+    background: linear-gradient(to left, #FF2D30FF 0%,  #ED1C2400 100%);
+    &.is-flip{
+      transform: scaleX(-1);
+    }
+  }
+  .caption {
+    font-size: 14px;
+    @include mobile {
+      font-size: 8px;
     }
   }
 }
@@ -1015,6 +1319,9 @@ div {
   .app-info {
     position: relative;
     height: 85.17%;
+    .org {
+      color: white;
+    }
     img {
       position: relative;
       height: 100%;
@@ -1031,18 +1338,92 @@ div {
         font-size: 14px;
       }
     }
+    .download {
+      p {
+        font-family: 'Noto Sans TC', sans-serif;
+        font-size: 25px;
+        margin-bottom: 8px;
+        @include mobile {
+          font-size: 12px;
+          margin-bottom: 0px;
+        }
+      }
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .download-button {
+        margin: 0 2px;
+        width: 150px;
+        height: 44px;
+        @include mobile {
+          width: 70px;
+          height: 24px;
+        }
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+      .download-ios {
+        background-image: url("../assets/images/download-android.png");
+      }
+      .download-android {
+        background-image: url("../assets/images/download-ios.png");
+      }
+      a {
+        color: white;
+        text-decoration: unset;
+        font-size: 20px;
+        @include mobile {
+          font-size: 10px;
+        }
+      }
+    }
   }
-  .mountain {
+  .sight {
     position: relative;
     height: 85.17%;
+    .org {
+      color: white;
+    }
     img {
       height: 100%;
       width: auto;
     }
   }
   .org {
-    color: white;
-    font-size: 14px;
+    color: black;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 16px;;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 250px;
+    --offset: -300;
+    @include mobile {
+      width: 200px;
+      --offset: -250;
+    }
+    @include mobile {
+      font-size: 10px;;
+    }
+    .org-logo-wrapper {
+      height: 140px;
+      @include mobile {
+        height: 90px;
+      }
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      img {
+        height: auto;
+        width: auto;
+      }
+    }
+    .dl-text {
+      @include mobile {
+        margin-top: -15px;
+      }
+    }
   }
   .org-wrapper {
     height: 85.17%;
@@ -1051,60 +1432,18 @@ div {
   }
 }
 
-
-
-.download {
-  font-size: 25px;
-  @include mobile {
-    font-size: 14px;
-  }
-  font-family: 'Noto Sans TC', sans-serif;
-  display: flex;
-  flex-direction: column;
+#content-end {
+  padding: 0 400px 0 200px;
   align-items: center;
-  .download-button {
-    margin: 0 2px;
-    width: 150px;
-    height: 44px;
-    @include mobile {
-      width: 80px;
-      height: 24px;
-    }
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-  .download-ios {
-    background-image: url("../assets/images/download_android.png");
-  }
-  .download-android {
-    background-image: url("../assets/images/download_ios.png");
-  }
-  .icon {
-    width: 25px;
-    height: 25px;
-    margin-right: 10px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    @include mobile {
-      width: 12px;
-      height: 12px;
-      margin-right: 4px;
-    }
-  }
-  .instagram-icon {
-    background-image: url("../assets/icons/icon-instagram.png");
-  }
-  .facebook-icon {
-    background-image: url("../assets/icons/icon-facebook.png");
-  }
-  a {
-    color: white;
-    text-decoration: unset;
+  font-size: 35px;
+  @include mobile {
     font-size: 20px;
+    padding: 0 300px 0 100px;
+  }
+  & > div {
+    margin-left: -50px;
     @include mobile {
-      font-size: 10px;
+      margin-left: -30px;
     }
   }
 }

@@ -13,11 +13,12 @@ function App() {
   const [isLandscape, setIsLandscape] = useState(false);
   const [canScroll, setCanScroll] = useState(false);
 
-  window.addEventListener('DOMContentLoaded', (event) => {
-    console.log('DOM fully loaded and parsed');
-  });
+  const setBgHeight = () => {
+    document.getElementById('bg-start').style.height = window.innerHeight + 'px';
+  }
 
   useEffect(() => {
+    setBgHeight();
     setTimeout(
       () => setIsLandscape(window.innerWidth > window.innerHeight)
     , 500)
@@ -26,11 +27,16 @@ function App() {
   //execute when resizing finish
   let resizeLoop;
   window.addEventListener("resize", () => {
+    setBgHeight();
     clearTimeout(resizeLoop);
     resizeLoop = setTimeout(doneResizing, 500);
   });
   const doneResizing = () => {
-    setIsLandscape(window.innerWidth > window.innerHeight)
+    const isLandscape = window.innerWidth > window.innerHeight;
+    setTimeout(
+      () => setIsLandscape(isLandscape),
+      isLandscape ? 500 : 0
+    )
   }
 
   useEffect(() => {
@@ -44,7 +50,7 @@ function App() {
     <Provider store={store}>
       <div className={isLandscape ? 'is-landscape' : ''} style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
         <Gallery canScroll={canScroll}/>
-        {/* <LightBox/> */}
+        <LightBox/>
         <Cover/>
       </div>
     </Provider>

@@ -1,12 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MdPlayCircleFilled, MdPauseCircleFilled } from "react-icons/md";
 
-const AudioPlayer = () => {
+const AudioPlayer = ({ audio }) => {
 
-  const audioRef = useRef( new Audio(require('../assets/audios/test.mp3').default) );
+  const audioRef = useRef( new Audio(audio) );
   const intervalRef = useRef();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
+
+  useEffect(() => {
+    return () => {
+      audioRef.current.pause();
+    }
+  }, [])
 
   const onPlayPause = () => {
     setIsPlaying(!isPlaying);
@@ -43,7 +49,7 @@ const AudioPlayer = () => {
 
   return (
     <div className='audio-player'>
-      <div className='audio-button' onClick={onPlayPause}>
+      <div className='play-button' onClick={onPlayPause}>
         <MdPlayCircleFilled color={'#5c5454'} style={{ opacity: isPlaying ? 0 : 1 }}/>
         <MdPauseCircleFilled color={'#5c5454'} style={{ opacity: isPlaying ? 1 : 0 }}/>
       </div>
