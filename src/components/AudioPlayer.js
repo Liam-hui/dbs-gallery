@@ -14,19 +14,26 @@ const AudioPlayer = ({ audio }) => {
     }
   }, [])
 
-  const onPlayPause = () => {
-    setIsPlaying(!isPlaying);
-  }
-
   useEffect(() => {
-    if (isPlaying) {
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+    setIsPlaying(false);
+    setCurrentTime(0);
+    setProgress(0);
+    clearInterval(intervalRef.current);
+    audioRef.current = new Audio(audio);
+  }, [audio])
+
+  const onPlayPause = () => {
+    if (!isPlaying) {
       audioRef.current.play();
       startTimer();
     } else {
       audioRef.current.pause();
       clearInterval(intervalRef.current);
     }
-  }, [isPlaying])
+    setIsPlaying(!isPlaying);
+  }
 
   const startTimer = () => {
 	  clearInterval(intervalRef.current);
@@ -35,17 +42,37 @@ const AudioPlayer = ({ audio }) => {
       if (audioRef.current.ended) {
         setIsPlaying(false);
         setCurrentTime(0);
+        setProgress(0);
       } 
       else if (audioRef.current.currentTime) {
         setCurrentTime(audioRef.current.currentTime)
+        setProgress(audioRef.current.currentTime / audioRef.current.duration * 100);
       } 
     }, [100]);
 	}
 
-  const progress = `${currentTime / audioRef.current.duration * 100}%`;
-  const min = Math.floor(currentTime / 60);
-  const sec = Math.floor(currentTime) % 60;
+  const [progress, setProgress] = useState(0);
+
+  const onChange = (e) => {
+    setProgress(e.target.value);
+    const time = audioRef.current.duration * e.target.value / 100;
+    audioRef.current.currentTime = time;
+    setCurrentTime(time);
+  }
+
+  const onMouseDown = () => {
+    clearInterval(intervalRef.current);
+  }
+
+  const onMouseUp = () => {
+    if (isPlaying) {
+      startTimer();
+    }
+  }
+
   const addZero = (value) => value < 10 ? '0' + value : value;
+  const min = addZero( Math.floor(currentTime / 60) );
+  const sec = addZero( Math.floor(currentTime) % 60 );
 
   return (
     <div className='audio-player'>
@@ -53,9 +80,10 @@ const AudioPlayer = ({ audio }) => {
         <MdPlayCircleFilled color={'#5c5454'} style={{ opacity: isPlaying ? 0 : 1 }}/>
         <MdPauseCircleFilled color={'#5c5454'} style={{ opacity: isPlaying ? 1 : 0 }}/>
       </div>
-      <div className='audio-time'>{`${addZero(min)}:${addZero(sec)}`}</div>
+      <div className='audio-time'>{`${min}:${sec}`}</div>
       <div className='audio-track'>
-        <div className='audio-progress' style={{ width: progress }} />
+        <input type="range" min="0" max="100" class="audio-slider" value={progress} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onChange={onChange}/>
+        <div className='audio-progress' style={{ width: `${parseFloat(progress) + 1}%` }} />
       </div>
     </div>
   )

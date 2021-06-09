@@ -55,7 +55,7 @@ export default function LightBox() {
 const Story = ({ data }) => {
   
   const { album } = data;
-  const [index, setIndex] = useState(data.index?? 1)
+  const [index, setIndex] = useState(data.index?? 1) 
 
   const [imageHeight, setImageHeight] = useState(0)
   const hasSetRef = useRef(false);
@@ -100,7 +100,7 @@ const Story = ({ data }) => {
             <br/>
             {photoData?.paragraph?? ''}
           </p>
-          <AudioPlayer audio={require(`../assets/audios/fiona-1.mp3`).default}/>
+          <AudioPlayer audio={require(`../assets/audios/${album}-${index}.mp3`).default}/>
           <div className='label'>
             {album == 'sight' ?
               '盲蹤踪團隊口述影像'
@@ -109,19 +109,20 @@ const Story = ({ data }) => {
             }
           </div>
           {album == 'sight' ?
-            <img className='sight-logo' src={require(`../assets/images/sight-logo.svg`).default}/>
+            <img className='sight-logo' src={require(`../assets/images/sight-logo.png`).default}/>
           :
-            <img className='audio-icon' src={require('../assets/icons/icon-volume.svg').default}/>
+            <img className='audio-icon' src={require('../assets/icons/icon-volume.png').default}/>
           }
         </div>
       </div>
       
         {index > 1 &&
-          <img className='arrow-icon arrow-icon-left' src={require('../assets/icons/icon-arrow.svg').default} onClick={() => goToNext(-1)}/>
+          <img className='arrow-icon arrow-icon-left' src={require('../assets/icons/icon-arrow.png').default} onClick={() => goToNext(-1)}/>
         }
         {Object.keys(photosData[album].photos).length > index &&
-          <img className='arrow-icon arrow-icon-right' src={require('../assets/icons/icon-arrow.svg').default} onClick={() => goToNext(1)}/>
+          <img className='arrow-icon arrow-icon-right' src={require('../assets/icons/icon-arrow.png').default} onClick={() => goToNext(1)}/>
         }
+
     </div>
   )
 

@@ -25,7 +25,7 @@ const AudioButton = (props) => {
           label
         }
       </div>
-      <img className='audio-button-icon' src={require('../assets/icons/icon-volume.svg').default}/>
+      <img className='audio-button-icon' src={require('../assets/icons/icon-volume.png').default}/>
     </div>
   )
 

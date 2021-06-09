@@ -3,7 +3,7 @@
 
 @font-face {
   font-family: "Avenir";
-  src: url("../assets/fonts/Avenir-Book.ttf");
+  src: url("../assets/fonts/Avenir-Regular.ttf");
 }
 
 // $tablet-width: 768px;
@@ -81,7 +81,7 @@ div {
   justify-content: center;
   font-size: 22px;
   opacity: 1;
-  z-index: 99;
+  z-index: 9999;
   transition: opacity 0.5s ease-in-out;
   #rotate {
     position: absolute;
@@ -107,11 +107,19 @@ div {
       }
     }
   }
+  .loading-wrapper{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    top: 25%;
+  }
 }
 .is-landscape #cover {
   opacity: 0;
   pointer-events: none;
-  transition: opacity 1s ease-in-out 1s;
+  transition: opacity 1s ease-in-out;
 }
 
 #intro {
@@ -130,7 +138,7 @@ div {
     top: 35%;
     right: 15px;
     opacity: 0;
-    transition: opacity 0.5s ease-in-out 2.5s;
+    transition: opacity 0.5s ease-in-out 1s;
     font-size: 22px;
     @include mobile {
       right: 5px;
@@ -156,24 +164,9 @@ div {
       right: 60px;
     }
   }
-  .human {
-    opacity: 0;
-    position: absolute;
-    bottom: 5vh;
-    left: 30%;
-    height: 300px;
-    width: auto;
-    transition: opacity 0.5s ease-in-out 2s;
-    @include mobile {
-      height: 150px;
-    }
-  }
 }
-.is-landscape #intro {
+.is-init #intro {
   p {
-    opacity: 1;
-  }
-  .human {
     opacity: 1;
   }
 }
@@ -189,10 +182,10 @@ div {
     height: auto;
   }
 }
-.is-landscape #banner {
+.is-init #banner {
   width: 100%;
   top: 10%;
-  transition: all 0.7s ease-in-out 2s;
+  transition: all 0.7s ease-in-out 0.8s;
 }
 
 #gallery-container {
@@ -221,6 +214,53 @@ div {
       width: auto;
     }
   }
+}
+
+#overlay {
+  opacity: 0;
+  position: absolute;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease-in-out 2.5s;
+  .human {
+    opacity: 0.5;
+    position: absolute;
+  }
+  .human-1 {
+    bottom: 3vh;
+    left: 20vw;
+    height: 300px;
+    width: auto;
+    @include mobile {
+      height: 130px;
+    }
+  }
+  .human-2 {
+    bottom: 5vh;
+    left: 2000px;
+    height: 300px;
+    width: auto;
+    transition: opacity 0.5s ease-in-out 2s;
+    @include mobile {
+      left: 800px;
+      height: 150px;
+    }
+  }
+  .human-3 {
+    bottom: 10vh;
+    left: 3500px;
+    height: 300px;
+    width: auto;
+    @include mobile {
+      left: 1700px;
+      height: 130px;
+    }
+  }
+}
+.is-landscape #overlay{
+  opacity: 1;
 }
 
 .content-container {
@@ -295,7 +335,7 @@ div {
     transition: opacity 0.5s ease-in-out;
   }
   &#artist-photo-1 {
-    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out 2.4s;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out 1.2s;
     width: 400px;
     height: 430px;
     @include mobile {
@@ -316,7 +356,7 @@ div {
       width: 173px;
       height: 200px;
     }
-    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out 2.6s;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out 1.4s;
     transform: translateY(35px);
     @include mobile {
       transform: translateY(20px);
@@ -329,7 +369,7 @@ div {
       width: 160px;
       height: 200px;
     }
-    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out 2.8s;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out 1.6s;
   }
   &#artist-photo-4 {
     width: 400px;
@@ -338,14 +378,14 @@ div {
       width: 163px;
       height: 200px;
     }
-    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out 3s;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out 1.8s;
     transform: translateY(35px);
     @include mobile {
       transform: translateY(20px);
     }
   }
 }
-.is-landscape .artist-photo-wrapper {
+.is-init .artist-photo-wrapper {
   opacity: 1;
 }
 .is-opened .artist-photo-wrapper {
@@ -477,10 +517,6 @@ div {
   }
 }
 
-.human {
-  pointer-events: none;
-}
-
 .info-box {
   position: relative;
   background-color: rgba(255, 255, 255, 0.4);
@@ -503,8 +539,8 @@ div {
 }
 
 .learn-more {
+  font-family: "Avenir", sans-serif;
   display: inline-block;
-  font-family: "Avenir";
   color: white;
   background: linear-gradient(to left, #ED1C24FF 50%,  #ED1C2400 100%);
   font-size: 16px;
@@ -556,6 +592,7 @@ div {
 }
 
 .light-box {
+  z-index: 999;
   white-space: pre-line;
   display: flex;
   flex-direction: column;
@@ -737,47 +774,82 @@ div {
     transform: translateX(-3px);
   }
   .play-button {
-    width: 55px;
-    height: 55px;
-    font-size: 55px;
-    cursor: pointer;
-    @include mobile {
+      width: 55px;
+      height: 55px;
+      font-size: 55px;
+      cursor: pointer;
+      @include mobile {
       width: 24px;
       height: 24px;
       font-size: 24px;
-    }
-    svg {
+      }
+      svg {
       position: absolute;
-    }
+      }
   }
   .audio-time {
-    font-size: 16px;
-    color: #5c5454;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    margin: 0 11px 0 6px;
-    @include mobile {
+      font-size: 16px;
+      color: #5c5454;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      margin: 0 11px 0 6px;
+      @include mobile {
       font-size: 10px;
       margin: 0 8px 0 4px;
-    }
+      }
   }
   .audio-track {
-    background-color: #a1a1a1;
-    display: flex;
-    align-items: center;
-    height: 6px;
-    width: 220px;
-    @include mobile {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 220px;
+      @include mobile {
       width: 100px;
-      height: 4px;
-    }
+      }
   }
   .audio-progress {
-    background-color: black;
-    width: 0;
-    height: 11px;
-    @include mobile {
-      height: 8px;
+      cursor: pointer;
+      pointer-events: none;
+      position: absolute;
+      background-color: black;
+      width: 0;
+      height: 11px;
+      @include mobile {
+          height: 8px;
+      }
+  }
+  .audio-slider {
+      -webkit-appearance: none;
+      border-radius: 0;
+      margin: 0;
+      height: 6px;
+      width: 100%;
+      background-color: #a1a1a1;
+      outline: none;
+      opacity: 0.7;
+      -webkit-transition: .2s;
+      transition: opacity .2s;
     }
+    
+    .audio-slider:hover {
+      opacity: 1;
+    }
+    
+    .audio-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      border: none;
+      width: 10px;
+      height: 11px;
+      background-color: transparent;
+      cursor: pointer;
+    }
+    
+    .audio-slider::-moz-range-thumb {
+      border: none;
+      width: 10px;
+      height: 11px;
+      background-color: transparent;
+      cursor: pointer;
   }
 }
 
@@ -858,7 +930,7 @@ div {
 
 #content-2 {
   .title {
-    z-index: 99;
+    z-index: 10;
     margin-top: 15px;
     @include mobile {
       margin-top: 5px;
@@ -877,7 +949,7 @@ div {
   };
   .story-credit-text {
     position: relative;
-    z-index: 99;
+    z-index: 10;
     @include mobile {
       margin-top: -10px;
     }
@@ -938,17 +1010,6 @@ div {
       @include mobile {
         height: 40px;
       }
-    }
-  }
-  .human {
-    opacity: 0.5;
-    position: absolute;
-    bottom: 3vh;
-    left: 5%;
-    height: 300px;
-    width: auto;
-    @include mobile {
-      height: 130px;
     }
   }
   .info-box {
@@ -1155,7 +1216,7 @@ div {
   padding-top: 70px;
   @include mobile {
     padding-top: 30px;
-    padding-left: 110px;
+    padding-left: 80px;
     padding-right: 180px;
   }
   .title img{
@@ -1169,7 +1230,11 @@ div {
     left: 0;
     bottom: 0;
     height: 95%;
-    width: auto;
+    width: 730px;
+    object-fit: cover;
+    @include mobile {
+      width: 380px;
+    }
   }
   .dbs-feature {
     position: relative;
@@ -1177,11 +1242,13 @@ div {
     @include mobile {
       margin-right: 30px;
     }
-    img {
-      height: 360px;
-      width: auto;
-      @include mobile {
-        height: 180px;
+    .dbs-feature-img {
+      img {
+        height: 360px;
+        width: auto;
+        @include mobile {
+          height: 180px;
+        }
       }
     }
     p {
@@ -1220,24 +1287,18 @@ div {
         font-size: 12px;
       }
     }
-  }
-  .human {
-    opacity: 0.5;
-    position: absolute;
-    bottom: 10vh;
-    right: 8%;
-    height: 300px;
-    width: auto;
-    @include mobile {
-      height: 130px;
+    a {
+      color: black;
     }
   }
 }
 
 #content-dbs-album {
+  padding-top: 20px;
   font-size: 80px;
   @include mobile {
     font-size: 30px;
+    padding-top: 3px;
   }
   .title {
     line-height: 1.7;
@@ -1251,12 +1312,10 @@ div {
     h1 {
       color: black;
       margin: 0;
-      margin-left: -18px;
       font-weight: 600;
-      font-size: 30px;
+      font-size: 24px;
       @include mobile {
-        font-size: 14px;
-        margin-left: -8px;
+        font-size: 10px;
       }
     }
     a {
@@ -1271,7 +1330,7 @@ div {
     height: 100px;
     width: auto;
     @include mobile {
-      height: 50px;
+      height: 46px;
     }
   }
   .photo {
@@ -1285,17 +1344,33 @@ div {
   }
   .red-gradient {
     position: absolute;
-    height: 1.5em;
-    background: linear-gradient(to left, #FF2D30FF 0%,  #ED1C2400 100%);
-    &.is-flip{
-      transform: scaleX(-1);
+    top: 55px;
+    left: -70px;
+    width: 1800px; 
+    height: 600px;
+    @include mobile {
+      top: 12px;
+      left: -30px;
+      width: 900px; 
+      height: 300px;
     }
+    // height: 1.5em;
+    // background: linear-gradient(to left, #FF2D30FF 0%,  #ED1C2400 100%);
+    // &.is-flip{
+    //   transform: scaleX(-1);
+    // }
   }
   .caption {
     font-size: 14px;
     @include mobile {
       font-size: 8px;
     }
+  }
+  .row {
+    pointer-events: none;
+  }
+  a {
+    pointer-events: auto;
   }
 }
 
@@ -1364,10 +1439,10 @@ div {
         background-position: center;
       }
       .download-ios {
-        background-image: url("../assets/images/download-android.png");
+        background-image: url("../assets/images/download-ios.png");
       }
       .download-android {
-        background-image: url("../assets/images/download-ios.png");
+        background-image: url("../assets/images/download-android.png");
       }
       a {
         color: white;
@@ -1445,5 +1520,93 @@ div {
     @include mobile {
       margin-left: -30px;
     }
+  }
+}
+
+.loading {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  @include mobile {
+    transform: scale(0.6);
+  }
+}
+.loading div {
+  animation: loading 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  transform-origin: 40px 40px;
+}
+.loading div:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #AAAAAA;
+  margin: -4px 0 0 -4px;
+}
+.loading div:nth-child(1) {
+  animation-delay: -0.036s;
+}
+.loading div:nth-child(1):after {
+  top: 63px;
+  left: 63px;
+}
+.loading div:nth-child(2) {
+  animation-delay: -0.072s;
+}
+.loading div:nth-child(2):after {
+  top: 68px;
+  left: 56px;
+}
+.loading div:nth-child(3) {
+  animation-delay: -0.108s;
+}
+.loading div:nth-child(3):after {
+  top: 71px;
+  left: 48px;
+}
+.loading div:nth-child(4) {
+  animation-delay: -0.144s;
+}
+.loading div:nth-child(4):after {
+  top: 72px;
+  left: 40px;
+}
+.loading div:nth-child(5) {
+  animation-delay: -0.18s;
+}
+.loading div:nth-child(5):after {
+  top: 71px;
+  left: 32px;
+}
+.loading div:nth-child(6) {
+  animation-delay: -0.216s;
+}
+.loading div:nth-child(6):after {
+  top: 68px;
+  left: 24px;
+}
+.loading div:nth-child(7) {
+  animation-delay: -0.252s;
+}
+.loading div:nth-child(7):after {
+  top: 63px;
+  left: 17px;
+}
+.loading div:nth-child(8) {
+  animation-delay: -0.288s;
+}
+.loading div:nth-child(8):after {
+  top: 56px;
+  left: 12px;
+}
+@keyframes loading {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Provider } from 'react-redux';
 import store from './store';
 
@@ -10,48 +10,73 @@ import '@/styles/styles.css';
 
 function App() {
 
+  const [isLoaded, setIsLoaded] = useState(false);
+  const isLoadedRef = useRef(isLoaded);
   const [isLandscape, setIsLandscape] = useState(false);
   const [canScroll, setCanScroll] = useState(false);
+
+  useEffect(() => {
+    Promise.all(
+      Array.from(document.images).filter(img => !img.complete)
+        .map(img => new Promise (
+          resolve => { 
+            img.onload = img.onerror = resolve; 
+          }
+        ))
+      ).then(() => {
+        // console.log('images finished loading');
+        setIsLoaded(true);
+        isLoadedRef.current = true;
+      }
+    );
+    setTimeout(
+      () => {
+        setIsLoaded(true);
+        isLoadedRef.current = true;
+      }
+      ,8000
+    )
+  }, []); 
 
   const setBgHeight = () => {
     document.getElementById('bg-start').style.height = window.innerHeight + 'px';
   }
 
   useEffect(() => {
-    setBgHeight();
-    setTimeout(
-      () => setIsLandscape(window.innerWidth > window.innerHeight)
-    , 500)
-  }, []); 
+    if (isLoaded) {
+      setBgHeight();
+      setTimeout(
+        () => setIsLandscape(window.innerWidth > window.innerHeight)
+      ,500)
+    }
+  }, [isLoaded]); 
 
   //execute when resizing finish
   let resizeLoop;
+  const doneResizing = () => {
+    if (isLoadedRef.current)
+      setIsLandscape(window.innerWidth > window.innerHeight);
+  }
   window.addEventListener("resize", () => {
     setBgHeight();
     clearTimeout(resizeLoop);
-    resizeLoop = setTimeout(doneResizing, 500);
+    resizeLoop = setTimeout(doneResizing, 200);
+    // setIsLandscape(window.innerWidth > window.innerHeight);
   });
-  const doneResizing = () => {
-    const isLandscape = window.innerWidth > window.innerHeight;
-    setTimeout(
-      () => setIsLandscape(isLandscape),
-      isLandscape ? 500 : 0
-    )
-  }
 
   useEffect(() => {
     setTimeout(
       () => setCanScroll(isLandscape),
-      isLandscape ? 2500 : 0
+      isLandscape ? 800 : 0
     )
   }, [isLandscape]); 
 
   return (
     <Provider store={store}>
       <div className={isLandscape ? 'is-landscape' : ''} style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
-        <Gallery canScroll={canScroll}/>
+        <Gallery isLandscape={isLandscape} canScroll={canScroll}/>
         <LightBox/>
-        <Cover/>
+        <Cover isLoaded={isLoaded}/>
       </div>
     </Provider>
   );
